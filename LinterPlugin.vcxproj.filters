@@ -1,0 +1,188 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\10 Main">
+      <UniqueIdentifier>{ab2b9d83-d0ad-4b1a-a0b8-1b539b416667}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\20 LinterPlugin">
+      <UniqueIdentifier>{e55ba71d-4093-451f-ac9e-de329a3ac32d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\20 LinterPlugin\30 Windows">
+      <UniqueIdentifier>{720c1c99-de9a-4c1d-846a-592568447431}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\20 LinterPlugin\30 Windows\39 DockingWnd">
+      <UniqueIdentifier>{c7118c38-9f2e-4fb1-ac8f-1f979d98858e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\20 LinterPlugin\20 LuaChecker">
+      <UniqueIdentifier>{5f5b517e-364d-461d-b505-630e707a42c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\20 LinterPlugin\10 Main">
+      <UniqueIdentifier>{6e9fa075-c1ae-4a7a-90a6-8d550a662899}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\20 LinterPlugin\10 Main\Base">
+      <UniqueIdentifier>{2b18a44f-6d45-4640-b239-e55150258ce2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\20 LinterPlugin\60 NppApi">
+      <UniqueIdentifier>{0077dc6f-8313-4ebf-b874-15d4448a1049}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\20 LinterPlugin\60 NppApi\DockingWnd">
+      <UniqueIdentifier>{9c3f951e-1216-471a-88ed-2986102273f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\20 LinterPlugin\60 NppApi\Scintilla">
+      <UniqueIdentifier>{d2e4a6a8-1893-4c84-91ef-2168eac3ef30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\20 LinterPlugin\60 NppApi\NPP">
+      <UniqueIdentifier>{a5f691bd-adfb-46b8-aa3b-641055478c60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\20 LinterPlugin\20 LuaChecker\Decoders">
+      <UniqueIdentifier>{8d9e71c6-23dc-4bd7-94aa-405c3a1fb2bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\20 LinterPlugin\20 LuaChecker\Decoders\Base">
+      <UniqueIdentifier>{b78c70d1-2d4d-45de-a9aa-6bd4b9dd53d3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Source Files\10 Main</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Source Files\10 Main</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DockingWnd\DockingWndBase.h">
+      <Filter>Source Files\20 LinterPlugin\30 Windows\39 DockingWnd</Filter>
+    </ClInclude>
+    <ClInclude Include="DockingWnd\DockingWndIface.h">
+      <Filter>Source Files\20 LinterPlugin\30 Windows\39 DockingWnd</Filter>
+    </ClInclude>
+    <ClInclude Include="DockingWnd\Docking.h">
+      <Filter>Source Files\20 LinterPlugin\60 NppApi\DockingWnd</Filter>
+    </ClInclude>
+    <ClInclude Include="DockingWnd\dockingResource.h">
+      <Filter>Source Files\20 LinterPlugin\60 NppApi\DockingWnd</Filter>
+    </ClInclude>
+    <ClInclude Include="NppApi\Scintilla.h">
+      <Filter>Source Files\20 LinterPlugin\60 NppApi\Scintilla</Filter>
+    </ClInclude>
+    <ClInclude Include="NppApi\menuCmdID.h">
+      <Filter>Source Files\20 LinterPlugin\60 NppApi\NPP</Filter>
+    </ClInclude>
+    <ClInclude Include="NppApi\Notepad_plus_msgs.h">
+      <Filter>Source Files\20 LinterPlugin\60 NppApi\NPP</Filter>
+    </ClInclude>
+    <ClInclude Include="NppApi\NppDll.h">
+      <Filter>Source Files\20 LinterPlugin\10 Main\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="NppApi\NppDllData.h">
+      <Filter>Source Files\20 LinterPlugin\10 Main\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="NppApi\NppPluginBase.h">
+      <Filter>Source Files\20 LinterPlugin\10 Main\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageButton.h">
+      <Filter>Source Files\20 LinterPlugin\30 Windows\39 DockingWnd</Filter>
+    </ClInclude>
+    <ClInclude Include="ResultListDlg.h">
+      <Filter>Source Files\20 LinterPlugin\30 Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="LinterPlugin.h">
+      <Filter>Source Files\20 LinterPlugin\10 Main</Filter>
+    </ClInclude>
+    <ClInclude Include="ListCtrl.h">
+      <Filter>Source Files\20 LinterPlugin\30 Windows\39 DockingWnd</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaCheckPlainDecoder.h">
+      <Filter>Source Files\20 LinterPlugin\20 LuaChecker\Decoders</Filter>
+    </ClInclude>
+    <ClInclude Include="DecoderBase.h">
+      <Filter>Source Files\20 LinterPlugin\20 LuaChecker\Decoders\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="LinterManager.h">
+      <Filter>Source Files\20 LinterPlugin\20 LuaChecker</Filter>
+    </ClInclude>
+    <ClInclude Include="LinterData.h">
+      <Filter>Source Files\20 LinterPlugin\20 LuaChecker</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files\10 Main</Filter>
+    </ClCompile>
+    <ClCompile Include="DockingWnd\DockingWndBase.cpp">
+      <Filter>Source Files\20 LinterPlugin\30 Windows\39 DockingWnd</Filter>
+    </ClCompile>
+    <ClCompile Include="DockingWnd\DockingWndIface.cpp">
+      <Filter>Source Files\20 LinterPlugin\30 Windows\39 DockingWnd</Filter>
+    </ClCompile>
+    <ClCompile Include="NppApi\NppDll.cpp">
+      <Filter>Source Files\20 LinterPlugin\10 Main\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="NppApi\NppPluginBase.cpp">
+      <Filter>Source Files\20 LinterPlugin\10 Main\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageButton.cpp">
+      <Filter>Source Files\20 LinterPlugin\30 Windows\39 DockingWnd</Filter>
+    </ClCompile>
+    <ClCompile Include="ResultListDlg.cpp">
+      <Filter>Source Files\20 LinterPlugin\30 Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="LinterPlugin.cpp">
+      <Filter>Source Files\20 LinterPlugin\10 Main</Filter>
+    </ClCompile>
+    <ClCompile Include="ListCtrl.cpp">
+      <Filter>Source Files\20 LinterPlugin\30 Windows\39 DockingWnd</Filter>
+    </ClCompile>
+    <ClCompile Include="LuaCheckPlainDecoder.cpp">
+      <Filter>Source Files\20 LinterPlugin\20 LuaChecker\Decoders</Filter>
+    </ClCompile>
+    <ClCompile Include="DecoderBase.cpp">
+      <Filter>Source Files\20 LinterPlugin\20 LuaChecker\Decoders\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="LinterManager.cpp">
+      <Filter>Source Files\20 LinterPlugin\20 LuaChecker</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="LinterPlugin.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="LuaLinter.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Warning.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Warning.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Warning.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="WarningDisabled.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Error.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="ErrorDisabled.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MarkerLuaExclamation.xpm">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+</Project>
