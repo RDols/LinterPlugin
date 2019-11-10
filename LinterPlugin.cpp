@@ -131,7 +131,7 @@ void CLinterPlugin::OnMenuShowResultListDlg()
 void CLinterPlugin::OnDocumentBigChange()
 {
   LangType curLangType;
-  SendApp(NPPM_GETCURRENTLANGTYPE, 0, (LPARAM)&curLangType);
+  SendApp(NPPM_GETCURRENTLANGTYPE, 0, (LPARAM) &curLangType);
   mLintTester.SetFileLanguage(curLangType);
 
   //ClearErrors();
@@ -150,14 +150,20 @@ void CLinterPlugin::OnDocumentSmallChange(int Delay, bool ForceChanged)
 }
 void CLinterPlugin::FixEasyPeasy()
 {
-  //reversed. position changes after delete
-  for (std::vector<SLintError>::reverse_iterator it = mErrors.rbegin(); it != mErrors.rend(); ++it)
+  std::string doctxt = GetDocumentText();
+
+  std::string::size_type pos = 0u;
+  while ((pos = doctxt.find(" \r", 0)) != std::string::npos)
   {
-    if (it->m_error_code > 610 && it->m_error_code < 620)
-    {
-      SendEditor(SCI_DELETERANGE, it->m_position_begin, it->m_position_end - it->m_position_begin);
-    }
+    doctxt.replace(pos, 2, "\r");
   }
+
+  while ((pos = doctxt.find(" \n", 0)) != std::string::npos)
+  {
+    doctxt.replace(pos, 2, "\n");
+  }
+
+  SendEditor(SCI_SETTEXT, 0, (LPARAM)doctxt.c_str());
   OnDocumentBigChange();
   SetFocusToEditor();
 }

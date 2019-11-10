@@ -28,6 +28,12 @@ CResultListDlg::CResultListDlg(CLinterPlugin* Parent)
   , mParent(Parent)
 {
   mErrors = &mEmptyList;
+
+  mErrorButton.SetCheck(true);
+  mWarningButton.SetCheck(true);
+  mFormatButton.SetCheck(true);
+  mIgnoreButton.SetCheck(false);
+  mDebugButton.SetCheck(false);
 }
 
 CResultListDlg::~CResultListDlg()
@@ -43,12 +49,6 @@ void CResultListDlg::Create()
   mFormatButton.Create(mNPP, mHwnd);
   mIgnoreButton.Create(mNPP, mHwnd);
   mDebugButton.Create(mNPP, mHwnd);
-
-  mErrorButton.SetCheck(true);
-  mWarningButton.SetCheck(true);
-  mFormatButton.SetCheck(true);
-  mIgnoreButton.SetCheck(false);
-  mDebugButton.SetCheck(false);
 
   mButtonFixEasyPeasy = GetDlgItem(mHwnd, IDC_BUTTON_EASYPEASY);
   mButtonFormatDocument = GetDlgItem(mHwnd, IDC_BUTTON_FORMAT);

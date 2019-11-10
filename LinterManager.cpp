@@ -91,7 +91,7 @@ void CLinterManager::FormatDocument(std::string& doctxt)
 void CLinterManager::LintContent(const std::string& doctxt, int Delay, bool ForceChanged)
 {
   if (doctxt.empty()) return;
-  if (!TryEnterCriticalSection(&mCriticalSection_Busy)) return;
+  EnterCriticalSection(&mCriticalSection_Busy);
 
   mNewDataAvailableForced = ForceChanged;
   
