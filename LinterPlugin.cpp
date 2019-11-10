@@ -148,6 +148,7 @@ void CLinterPlugin::OnDocumentSmallChange(int Delay, bool ForceChanged)
     mLintTester.LintContent(doctxt, Delay, ForceChanged);
   }
 }
+
 void CLinterPlugin::FixEasyPeasy()
 {
   std::string doctxt = GetDocumentText();
@@ -275,6 +276,8 @@ void CLinterPlugin::OnMarginClick(int Modifiers, int Position, int MarginId)
 
 void CLinterPlugin::OnDwellStart(int Position, int x, int y)
 {
+  if (Position < 0) return;
+
   HWND hScintilla = GetScintillaHandle();
   for (std::vector<SLintError>::iterator it = mErrors.begin(); it != mErrors.end(); it++)
   {
