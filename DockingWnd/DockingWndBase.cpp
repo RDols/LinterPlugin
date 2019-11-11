@@ -100,8 +100,8 @@ INT_PTR CDockingWndBase::OnMessage(UINT message, WPARAM wParam, LPARAM lParam)
     }
     case WM_CONTEXTMENU:
     {
-      int xPos = LOWORD(lParam);
-      int yPos = HIWORD(lParam);
+      int16_t xPos = LOWORD(lParam);
+	  int16_t yPos = HIWORD(lParam);
       HWND hWnd = (HWND) wParam;
       OnContextMenu(hWnd, xPos, yPos);
       break;
