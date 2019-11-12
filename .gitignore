@@ -1,5 +1,9 @@
 
 \.vs
-\build
-
+**/LinterPlugin.*
+**/AutoCompletionPlugin.*
+**/Temp
+**/*.pdb
+**/Notepad++.exe
 LinterPlugin\.aps
+
