@@ -115,9 +115,9 @@ void CNppPluginBase::SendToolbarIcons()
   int count(0);
   for (std::vector<SToolbarItem>::iterator it = mToolbarItems.begin(); it != mToolbarItems.end(); it++)
   {
-    if (it->ResourceId > 0)
+	it->NPPMenuId = mMenuItems[count].CmdID;
+	if (it->ResourceId > 0)
     {
-      it->NPPMenuId = mMenuItems[count].CmdID;
       it->hToolbarBmp = ::LoadBitmap((HINSTANCE)mDllHandle, MAKEINTRESOURCE(it->ResourceId));
       if (it->hToolbarBmp)
       {
