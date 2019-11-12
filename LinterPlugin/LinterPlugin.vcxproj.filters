@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\10 Main">
+      <UniqueIdentifier>{ab2b9d83-d0ad-4b1a-a0b8-1b539b416667}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\20 LuaChecker">
+      <UniqueIdentifier>{5f5b517e-364d-461d-b505-630e707a42c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\20 LuaChecker\Decoders">
+      <UniqueIdentifier>{8d9e71c6-23dc-4bd7-94aa-405c3a1fb2bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\20 LuaChecker\Decoders\Base">
+      <UniqueIdentifier>{b78c70d1-2d4d-45de-a9aa-6bd4b9dd53d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\30 Windows">
+      <UniqueIdentifier>{720c1c99-de9a-4c1d-846a-592568447431}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\30 Windows\39 DockingWnd">
+      <UniqueIdentifier>{c7118c38-9f2e-4fb1-ac8f-1f979d98858e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\60 PluginCommon">
+      <UniqueIdentifier>{4bce354c-6922-4ac8-86ce-c505779781de}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\PluginCommon\DockingWndBase.h">
+      <Filter>Source Files\60 PluginCommon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\PluginCommon\DockingWndIface.h">
+      <Filter>Source Files\60 PluginCommon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\PluginCommon\NppDll.h">
+      <Filter>Source Files\60 PluginCommon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\PluginCommon\NppDllData.h">
+      <Filter>Source Files\60 PluginCommon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\PluginCommon\NppPluginBase.h">
+      <Filter>Source Files\60 PluginCommon</Filter>
+    </ClInclude>
+    <ClInclude Include="DecoderBase.h">
+      <Filter>Source Files\20 LuaChecker\Decoders\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageButton.h">
+      <Filter>Source Files\30 Windows\39 DockingWnd</Filter>
+    </ClInclude>
+    <ClInclude Include="LinterData.h">
+      <Filter>Source Files\20 LuaChecker</Filter>
+    </ClInclude>
+    <ClInclude Include="LinterManager.h">
+      <Filter>Source Files\20 LuaChecker</Filter>
+    </ClInclude>
+    <ClInclude Include="LinterPlugin.h">
+      <Filter>Source Files\10 Main</Filter>
+    </ClInclude>
+    <ClInclude Include="ListCtrl.h">
+      <Filter>Source Files\30 Windows\39 DockingWnd</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaCheckPlainDecoder.h">
+      <Filter>Source Files\20 LuaChecker\Decoders</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ResultListDlg.h">
+      <Filter>Source Files\30 Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Source Files\10 Main</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Source Files\10 Main</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\PluginCommon\DockingWndBase.cpp">
+      <Filter>Source Files\60 PluginCommon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PluginCommon\DockingWndIface.cpp">
+      <Filter>Source Files\60 PluginCommon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PluginCommon\NppDll.cpp">
+      <Filter>Source Files\60 PluginCommon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PluginCommon\NppPluginBase.cpp">
+      <Filter>Source Files\60 PluginCommon</Filter>
+    </ClCompile>
+    <ClCompile Include="DecoderBase.cpp">
+      <Filter>Source Files\20 LuaChecker\Decoders\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageButton.cpp">
+      <Filter>Source Files\30 Windows\39 DockingWnd</Filter>
+    </ClCompile>
+    <ClCompile Include="LinterManager.cpp">
+      <Filter>Source Files\20 LuaChecker</Filter>
+    </ClCompile>
+    <ClCompile Include="LinterPlugin.cpp">
+      <Filter>Source Files\10 Main</Filter>
+    </ClCompile>
+    <ClCompile Include="ListCtrl.cpp">
+      <Filter>Source Files\30 Windows\39 DockingWnd</Filter>
+    </ClCompile>
+    <ClCompile Include="LuaCheckPlainDecoder.cpp">
+      <Filter>Source Files\20 LuaChecker\Decoders</Filter>
+    </ClCompile>
+    <ClCompile Include="ResultListDlg.cpp">
+      <Filter>Source Files\30 Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files\10 Main</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="LinterPlugin.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resource\Debug.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resource\DebugDisabled.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resource\Error.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resource\ErrorDisabled.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resource\Format.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resource\FormatDisabled.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resource\Ignored.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resource\IgnoredDisabled.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resource\LuaLinter.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resource\Warning.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resource\Warning.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resource\Warning.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resource\WarningDisabled.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resource\MarkerLuaExclamation.xpm">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+</Project>
