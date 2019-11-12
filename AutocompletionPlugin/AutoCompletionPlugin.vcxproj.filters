@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\10 Main">
+      <UniqueIdentifier>{ab2b9d83-d0ad-4b1a-a0b8-1b539b416667}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\20 AutoCompletion">
+      <UniqueIdentifier>{e55ba71d-4093-451f-ac9e-de329a3ac32d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\60 PluginCommon">
+      <UniqueIdentifier>{546fbc34-c440-4382-a137-57c1d2e3bbb1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\PluginCommon\NppDll.h">
+      <Filter>Source Files\60 PluginCommon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\PluginCommon\NppDllData.h">
+      <Filter>Source Files\60 PluginCommon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\PluginCommon\NppPluginBase.h">
+      <Filter>Source Files\60 PluginCommon</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoCompletionPlugin.h">
+      <Filter>Source Files\10 Main</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Source Files\10 Main</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Source Files\10 Main</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\PluginCommon\NppDll.cpp">
+      <Filter>Source Files\60 PluginCommon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PluginCommon\NppPluginBase.cpp">
+      <Filter>Source Files\60 PluginCommon</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoCompletionPlugin.cpp">
+      <Filter>Source Files\10 Main</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files\10 Main</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="AutoCompletionPlugin.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
