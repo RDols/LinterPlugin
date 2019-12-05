@@ -80,6 +80,21 @@
     <ClInclude Include="targetver.h">
       <Filter>Source Files\10 Main</Filter>
     </ClInclude>
+    <ClInclude Include="LuaMarkers.h">
+      <Filter>Source Files\20 LuaChecker\Decoders</Filter>
+    </ClInclude>
+    <ClInclude Include="StringHelpers.h">
+      <Filter>Source Files\10 Main</Filter>
+    </ClInclude>
+    <ClInclude Include="DocWalker.h">
+      <Filter>Source Files\20 LuaChecker\Decoders</Filter>
+    </ClInclude>
+    <ClInclude Include="FunctionListCtrl.h">
+      <Filter>Source Files\30 Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="TreeCtrl.h">
+      <Filter>Source Files\30 Windows\39 DockingWnd</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\PluginCommon\DockingWndBase.cpp">
@@ -117,6 +132,18 @@
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files\10 Main</Filter>
+    </ClCompile>
+    <ClCompile Include="LuaMarkers.cpp">
+      <Filter>Source Files\20 LuaChecker\Decoders</Filter>
+    </ClCompile>
+    <ClCompile Include="DocWalker.cpp">
+      <Filter>Source Files\20 LuaChecker\Decoders</Filter>
+    </ClCompile>
+    <ClCompile Include="FunctionListCtrl.cpp">
+      <Filter>Source Files\30 Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="TreeCtrl.cpp">
+      <Filter>Source Files\30 Windows\39 DockingWnd</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -162,6 +189,30 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Resource\WarningDisabled.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resource\icon1.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resource\TabFunctionList.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resource\icon2.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resource\bitmap_lua_list.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resource\LuaLinter32.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resource\funcList_leaf.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resource\funcList_node.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resource\funcList_leaf_blue.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

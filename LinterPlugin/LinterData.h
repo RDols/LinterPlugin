@@ -2,57 +2,81 @@
 
 enum NSeverity
 {
-  SV_CRITICAL = 0,
-  SV_ERROR,
-  SV_WARNING,
-  SV_INFO,
-  SV_FORMAT,
-  SV_IGNORED,
-  SV_DEBUG,
-  SV_COUNT
+  DBG_DEBUG = 0x1000,
+  ERR_MASK = 0x2000,
+  ERR_CRITICAL,
+  ERR_ERROR,
+  ERR_WARNING,
+  ERR_FORMAT,
+  ERR_IGNORED,
+  MRK_MASK = 0x4000,
+  MRK_FUNCTION_GLOBAL,
+  MRK_FUNCTION_LOCAL,
+  MRK_IF,
+  MRK_FOR,
+  MRK_WHILE,
+  MRK_REPEAT,
+  MRK_BREAK,
+  MRK_TODO,
+  MRK_NAMESPACE,
+  MRK_COMMENT_LINE,
+  MRK_COMMENT_BLOCK,
+  MRK_STRING_LITERAL,
+  MRK_STRING_BLOCK,
+  MRK_MARK
 };
 
 struct SLintError
 {
-  int m_line;
-  int m_column_begin;
-  int m_column_end;
-  int m_position_begin;
-  int m_position_end;
+  int64_t m_pos_begin;
+  int64_t m_pos_end;
+  int64_t m_line_begin;
+  int64_t m_line_end;
+  int64_t m_column_begin;
+  int64_t m_column_end;
+  int64_t m_position_begin;
+  int64_t m_position_end;
   NSeverity m_severity;
-  int m_error_code;
+  int64_t m_error_code;
   std::string m_message;
   std::string m_subject;
 
   struct SLintError()
   {
-    m_line = -1;
+    m_pos_begin = -1;
+    m_pos_end = -1;
+    m_line_begin = -1;
+    m_line_end = -1;
     m_column_begin = -1;
     m_column_end = -1;
     m_position_begin = -1;
     m_position_end = -1;
-    m_severity = SV_COUNT;
+    m_severity = NSeverity::DBG_DEBUG;
     m_error_code = 0;
   }
 
   bool operator==(SLintError other)
   {
-    return (m_line == other.m_line &&
+    return (m_line_begin == other.m_line_begin &&
+      m_line_end == other.m_line_end &&
       m_column_begin == other.m_column_begin &&
       m_column_end == other.m_column_end &&
       m_error_code == other.m_error_code);
   }
   bool operator!=(SLintError other)
   {
-    return !(m_line == other.m_line &&
+    return !(m_line_begin == other.m_line_begin &&
+      m_line_end == other.m_line_end &&
       m_column_begin == other.m_column_begin &&
       m_column_end == other.m_column_end &&
       m_error_code == other.m_error_code);
   }
   bool operator<(SLintError other)
   {
-    if (m_line != other.m_line)
-      return m_line < other.m_line;
+    if (m_line_begin != other.m_line_begin)
+      return m_line_begin < other.m_line_begin;
+    if (m_line_end != other.m_line_end)
+      return m_line_end < other.m_line_end;
     if (m_column_begin != other.m_column_begin)
       return m_column_begin < other.m_column_begin;
     if (m_error_code != other.m_error_code)

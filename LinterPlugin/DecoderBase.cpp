@@ -74,11 +74,27 @@ void CDecoderBase::AppendErrors(std::vector<SLintError>& TotalErrors)
     if (!IsPresent(TotalErrors, error))
     {
       if (mIsInlineDecoder)
-        error.m_severity = SV_IGNORED;
+        error.m_severity = ERR_IGNORED;
       TotalErrors.push_back(error);
     }
   }
   //TotalErrors.insert(TotalErrors.end(), mErrors.begin(), mErrors.end());
+}
+
+void CDecoderBase::AddNewError(int64_t posBegin, int64_t lineBegin, int64_t colBegin, int64_t posEnd, int64_t lineEnd, int64_t colEnd, int64_t errorCode, NSeverity severity, std::string subject, std::string message)
+{
+  SLintError newErrorEntry;
+  newErrorEntry.m_pos_begin = posBegin;
+  newErrorEntry.m_pos_end = posEnd;
+  newErrorEntry.m_line_begin = lineBegin;
+  newErrorEntry.m_line_end = lineEnd;
+  newErrorEntry.m_column_begin = colBegin;
+  newErrorEntry.m_column_end = colEnd;
+  newErrorEntry.m_error_code = errorCode;
+  newErrorEntry.m_severity = severity;
+  newErrorEntry.m_subject = subject;
+  newErrorEntry.m_message = message;
+  AddNewError(newErrorEntry);
 }
 
 void CDecoderBase::AddNewError(const SLintError& NewError)

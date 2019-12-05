@@ -4,6 +4,7 @@
 #include "DecoderBase.h"
 #include "LinterData.h"
 
+#define LINTER_MSG_NEW_DATA   WM_USER + 7329
 class CLinterPlugin;
 
 //enum NLintType
@@ -13,9 +14,17 @@ class CLinterPlugin;
 //  LT_COUNT
 //};
 
+enum NCommandType
+{
+  CT_CMD_LINE = 0,
+  CT_DECODE_ONLY,
+  CT_COUNT
+};
+
 struct SCommandInfo
 {
   LangType LanguageType;
+  NCommandType CommandType;
   //NLintType LineType;
   std::wstring Command;
   CDecoderBase* OutputDecoder;
@@ -45,7 +54,7 @@ protected: // Help Functions
   void _LintContent();
 
 public: //Help Functions
-  static bool ExecuteCommand(const SCommandInfo& CommandInfo, const std::string& DocTxt, std::string& OutputStringA, std::string ErrorStringA, std::vector<SLintError>& RuntimeErrorList);
+  static bool ExecuteCommand(const SCommandInfo& CommandInfo, const std::string& DocTxt, std::string& OutputStringA, std::vector<SLintError>& RuntimeErrorList);
   static void WriteTempFile(TCHAR* TempFilePath, const std::string& DocTxt);
   static void DeleteTempFile(TCHAR* TempFilePath);
   static stringT ExpandCommand(stringT Command, TCHAR* TempFilePath);

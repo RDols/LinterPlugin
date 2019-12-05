@@ -20,18 +20,23 @@ INppDll* nppDll = Plugin;
 #define PLUGIN_MENU_ENABLE              2
 #define PLUGIN_MENU_CHECK_DOCUMENT      3
 #define PLUGIN_MENU_SHOW_RESULT_LIST    4
+#define PLUGIN_MENU_SHOW_FUNCTION_LIST  IDD_LINTER_FUNCTION_CTRL
 
 CLinterPlugin::CLinterPlugin()
   : mResultListDlg(this)
+  , mFunctionListCtrl(this)
 {
   mPluginName = _T("Linter Plugin");
   //AddMenuItem(PLUGIN_MENU_SEPERATOR, _T(""), PLUGIN_MENU_SEPERATOR_FUNCTION, NULL, false, 0);
   AddMenuItem(PLUGIN_MENU_ENABLE, _T("Enable"), CLinterPlugin::EnablePluginStatic, NULL, false, 0);
   AddMenuItem(PLUGIN_MENU_CHECK_DOCUMENT, _T("Check Document"), CLinterPlugin::OnMenuCheckDocumentStatic, NULL, false, 0);
   AddMenuItem(PLUGIN_MENU_SHOW_RESULT_LIST, _T("Show Error List"), CLinterPlugin::OnMenuShowResultListDlgStatic, NULL, false, IDB_BITMAP_LUALINT);
+  AddMenuItem(PLUGIN_MENU_SHOW_FUNCTION_LIST, _T("Show Function List"), CLinterPlugin::OnMenuShowFunctionListDlgStatic, NULL, false, IDB_BITMAP_LUA_LIST);
 
+  
   mMarginId = 1;
-  mMarkerId = 5;
+  mMarkerIdError = 5;
+  mMarkerIdFunction = 6;
   mPluginEnabled = false;
 }
 
@@ -67,11 +72,13 @@ void CLinterPlugin::beNotified(SCNotification* Notification)
     break;
   case SCN_UPDATEUI:
     break;
+  case LINTER_MSG_NEW_DATA:
+    if (ShowErrors(false))
+      ShowErrors(false);
+    break;
   default:
     break;
   }
-
-  ShowErrors(false);
 }
 
 void CLinterPlugin::EnablePlugin()
@@ -81,11 +88,21 @@ void CLinterPlugin::EnablePlugin()
   ::SendMessage(hScintilla, SCI_SETMARGINTYPEN, mMarginId, SC_MARGIN_SYMBOL);
 
   int mask = (int) ::SendMessage(hScintilla, SCI_GETMARGINMASKN, mMarginId, 0);
-  mask |= 1 << mMarkerId;
+  mask |= 1 << mMarkerIdError;
+  mask |= 1 << mMarkerIdFunction;
+
   ::SendMessage(hScintilla, SCI_SETMARGINMASKN, mMarginId, mask);
   ::SendMessage(hScintilla, SCI_SETMARGINSENSITIVEN, mMarginId, 1); //boolean. click events or not
-//::SendMessage(curScintilla, SCI_MARKERDEFINE, mMarkerId, SC_MARK_CIRCLE);
-  ::SendMessage(hScintilla, SCI_MARKERDEFINEPIXMAP, mMarkerId, (LPARAM)LuaExclamation2);
+
+  //::SendMessage(hScintilla, SCI_MARKERDEFINE, mMarkerIdError, SC_MARK_BOOKMARK);
+  //::SendMessage(hScintilla, SCI_MARKERDEFINE, mMarkerIdError, SC_MARK_UNDERLINE);
+  //::SendMessage(hScintilla, SCI_MARKERSETFORE, mMarkerIdError, 0x000000);
+  //::SendMessage(hScintilla, SCI_MARKERSETBACK, mMarkerIdError, 0xFF8888);
+  //::SendMessage(hScintilla, SCI_MARKERSETALPHA, mMarkerIdError, 0xFF);
+  ::SendMessage(hScintilla, SCI_MARKERDEFINEPIXMAP, mMarkerIdError, (LPARAM)LuaExclamation2);
+
+  ::SendMessage(hScintilla, SCI_MARKERDEFINE, mMarkerIdFunction, SC_MARK_UNDERLINE);
+  ::SendMessage(hScintilla, SCI_MARKERSETBACK, mMarkerIdFunction, 0xFF8888);
 
   mPluginEnabled = !mPluginEnabled;
   ::SendMessage(hScintilla, SCI_SETMOUSEDWELLTIME, 200, 0);
@@ -98,6 +115,9 @@ void CLinterPlugin::EnablePlugin()
     ClearErrors();
     mLintTester.StopErrorChecking();
   }
+
+  //mFunctionListCtrl.Init((HINSTANCE)mDllHandle, mNppData.NppHandle);
+  //mFunctionListCtrl.Create();
 
   SendApp(NPPM_SETMENUITEMCHECK, GetNppMenuId(PLUGIN_MENU_ENABLE), mPluginEnabled ? TRUE : FALSE);
 }
@@ -128,6 +148,26 @@ void CLinterPlugin::OnMenuShowResultListDlg()
   }
 }
 
+void CLinterPlugin::OnMenuShowFunctionListDlg()
+{
+  if (!mFunctionListCtrl.isCreated())
+  {
+    mFunctionListCtrl.Init((HINSTANCE)mDllHandle, mNppData.NppHandle);
+    mFunctionListCtrl.Create();
+    mFunctionListCtrl.Redraw();
+    return;
+  }
+  if (mFunctionListCtrl.isVisible())
+  {
+    mFunctionListCtrl.ShowWindow(false);
+    SendApp(NPPM_SETMENUITEMCHECK, GetNppMenuId(PLUGIN_MENU_SHOW_FUNCTION_LIST), FALSE);
+  }
+  else
+  {
+    mFunctionListCtrl.ShowWindow(true);
+    SendApp(NPPM_SETMENUITEMCHECK, GetNppMenuId(PLUGIN_MENU_SHOW_FUNCTION_LIST), TRUE);
+  }
+}
 void CLinterPlugin::OnDocumentBigChange()
 {
   LangType curLangType;
@@ -135,7 +175,7 @@ void CLinterPlugin::OnDocumentBigChange()
   mLintTester.SetFileLanguage(curLangType);
 
   //ClearErrors();
-  mResultListDlg.SetErrors(NULL);
+  mResultListDlg.SetErrors(nullptr);
 
   OnDocumentSmallChange(0, true);
 }
@@ -193,16 +233,36 @@ void CLinterPlugin::ClearErrors()
   //SendEditor(SCI_INDICATORCLEARRANGE, 0, length);
   //SendEditor(SCI_SETINDICATORCURRENT, oldid);
 
-  SendEditor(SCI_MARKERDELETEALL, mMarkerId);
+  SendEditor(SCI_MARKERDELETEALL, mMarkerIdError);
   //SendEditor(SCI_ANNOTATIONCLEARALL); //very slow and not needed at the moment.
 }
 
-void CLinterPlugin::ShowErrors(bool Force)
+void CLinterPlugin::ClearFunctionMarkers()
 {
-  if (!Force && !mLintTester.GetNewErrors(mErrors)) return;
+	LRESULT length = SendEditor(SCI_GETLENGTH);
+
+	LRESULT oldid = SendEditor(SCI_GETINDICATORCURRENT);
+
+	SendEditor(SCI_SETINDICATORCURRENT, INDICATOR_STYLE_ID_WARNING);
+	SendEditor(SCI_INDICATORCLEARRANGE, 0, length);
+	SendEditor(SCI_SETINDICATORCURRENT, oldid);
+
+	SendEditor(SCI_MARKERDELETEALL, mMarkerIdFunction);
+}
+
+bool CLinterPlugin::ShowErrors(bool Force)
+{
+  if (mInShowErrors)
+    return false;
+
+  if (!Force && !mLintTester.GetNewErrors(mErrors)) 
+    return false;
+
+  mInShowErrors = true; //Prevent recursive class while. It's in same thread as an result of SendEditor(...
 
   ClearErrors();
   std::vector<int> viewList = mResultListDlg.SetErrors(&mErrors);
+  mFunctionListCtrl.SetErrors(mErrors);
 
   LRESULT oldid = SendEditor(SCI_GETINDICATORCURRENT);
   SendEditor(SCI_INDICSETSTYLE, INDICATOR_STYLE_ID_WARNING, INDIC_BOX);  // INDIC_SQUIGGLE);
@@ -214,17 +274,17 @@ void CLinterPlugin::ShowErrors(bool Force)
 
   for (auto viewError : viewList)
   {
-    SendEditor(SCI_MARKERADD, mErrors[viewError].m_line - 1, mMarkerId);
-    mErrors[viewError].m_position_begin = (int)GetPositionForLine(mErrors[viewError].m_line - 1);
-    mErrors[viewError].m_position_end = mErrors[viewError].m_position_begin;
-    mErrors[viewError].m_position_begin += utfOffset(GetLineText(mErrors[viewError].m_line - 1), mErrors[viewError].m_column_begin - 1);
-    mErrors[viewError].m_position_end += utfOffset(GetLineText(mErrors[viewError].m_line - 1), mErrors[viewError].m_column_end - 1);
+    SendEditor(SCI_MARKERADD, mErrors[viewError].m_line_begin - 1, mMarkerIdError);
+    mErrors[viewError].m_position_begin = GetPositionForLine((int32_t) mErrors[viewError].m_line_begin - 1);
+    mErrors[viewError].m_position_begin += utfOffset(GetLineText((int32_t)mErrors[viewError].m_line_begin - 1), mErrors[viewError].m_column_begin - 1);
+    mErrors[viewError].m_position_end = GetPositionForLine((int32_t) mErrors[viewError].m_line_end - 1);
+    mErrors[viewError].m_position_end += utfOffset(GetLineText((int32_t) mErrors[viewError].m_line_end - 1), mErrors[viewError].m_column_end - 1);
     SendEditor(SCI_INDICATORFILLRANGE, mErrors[viewError].m_position_begin, (mErrors[viewError].m_position_end - mErrors[viewError].m_position_begin));
   }
 /*
   for (std::vector<SLintError>::iterator it = mErrors.begin(); it != mErrors.end(); it++)
   {
-    SendEditor(SCI_MARKERADD, it->m_line - 1, mMarkerId);
+    SendEditor(SCI_MARKERADD, it->m_line - 1, mMarkerIdError);
     it->m_position_begin = (int)GetPositionForLine(it->m_line - 1);
     it->m_position_end = it->m_position_begin;
     it->m_position_begin += utfOffset(GetLineText(it->m_line - 1), it->m_column_begin - 1);
@@ -233,6 +293,23 @@ void CLinterPlugin::ShowErrors(bool Force)
   }
   */
   SendEditor(SCI_SETINDICATORCURRENT, oldid);
+
+  ShowFunctionMarkers(false);
+  mInShowErrors = false;
+  return true;
+}
+
+void CLinterPlugin::ShowFunctionMarkers(bool /*Force*/)
+{
+	ClearFunctionMarkers();
+	//SendEditor(SCI_MARKERADD, 5, mMarkerIdFunction);
+  for (auto& it : mErrors)
+  {
+    if (it.m_severity == MRK_FUNCTION_LOCAL || it.m_severity == MRK_FUNCTION_GLOBAL)
+    {
+      SendEditor(SCI_MARKERADD, it.m_line_begin-2, mMarkerIdFunction);
+    }
+  }
 }
 
 int CLinterPlugin::utfOffset(const std::string utf8, int64_t unicodeOffset)
@@ -269,9 +346,9 @@ void CLinterPlugin::OnMarginClick(int /*Modifiers*/, int64_t Position, int Margi
 
   int mask = (int) ::SendMessage(hScintilla, SCI_MARKERGET, LineNr, 0);
   if ((mask & (1 << 5)) != 0)
-    ::SendMessage(hScintilla, SCI_MARKERDELETE, LineNr, mMarkerId);
+    ::SendMessage(hScintilla, SCI_MARKERDELETE, LineNr, mMarkerIdError);
   else
-    ::SendMessage(hScintilla, SCI_MARKERADD, LineNr, mMarkerId);
+    ::SendMessage(hScintilla, SCI_MARKERADD, LineNr, mMarkerIdError);
 }
 
 void CLinterPlugin::OnDwellStart(int64_t Position, int /*x*/, int /*y*/)

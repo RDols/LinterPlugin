@@ -140,7 +140,7 @@ void CResultListDlg::DoPupupMenuList(int posX, int posY)
   int Choice = DoPupupMenuList(posX, posY, menuItems);
   if (Choice == 2)
   {
-    int pos = (int) mParent->SendEditor(SCI_POSITIONFROMLINE, ErrorItem->m_line, 0); //be warned. I ask for net NEXT line, but m_line is zero based. Scintilla 1 based.
+    int pos = (int) mParent->SendEditor(SCI_POSITIONFROMLINE, ErrorItem->m_line_begin, 0); //be warned. I ask for the NEXT line, but m_line is zero based. Scintilla 1 based.
     pos = (int) mParent->SendEditor(SCI_POSITIONBEFORE, pos, 0);
 
     std::stringstream AddTxt;
@@ -232,33 +232,30 @@ void CResultListDlg::OnGetListDisplayInfoA(NMLVDISPINFOA* ListDisplayInfo)
         switch (pItem->iSubItem)
         {
           case CEL_LINE:
-            _itoa_s(ErrorItem->m_line, pItem->pszText, pItem->cchTextMax, 10);
+            _i64toa_s(ErrorItem->m_line_begin, pItem->pszText, pItem->cchTextMax, 10);
             break;
           case CEL_POS:
-            _itoa_s(ErrorItem->m_column_begin, pItem->pszText, pItem->cchTextMax, 10);
+            _i64toa_s(ErrorItem->m_column_begin, pItem->pszText, pItem->cchTextMax, 10);
             break;
           case CEL_SEVERITY:
             switch (ErrorItem->m_severity)
             {
-              case SV_CRITICAL:
+              case ERR_CRITICAL:
                 lstrcpyA(pItem->pszText, "Critical");
                 break;
-              case SV_ERROR:
+              case ERR_ERROR:
                 lstrcpyA(pItem->pszText, "Error");
                 break;
-              case SV_WARNING:
+              case ERR_WARNING:
                 lstrcpyA(pItem->pszText, "Warning");
                 break;
-              case SV_INFO:
-                lstrcpyA(pItem->pszText, "Info");
-                break;
-              case SV_FORMAT:
+              case ERR_FORMAT:
                 lstrcpyA(pItem->pszText, "Format");
                 break;
-              case SV_IGNORED:
+              case ERR_IGNORED:
                 lstrcpyA(pItem->pszText, "Ignored");
                 break;
-              case SV_DEBUG:
+              case DBG_DEBUG:
                 lstrcpyA(pItem->pszText, "Debug");
                 break;
               default:
@@ -267,7 +264,7 @@ void CResultListDlg::OnGetListDisplayInfoA(NMLVDISPINFOA* ListDisplayInfo)
               }
             break;
           case CEL_ERROR:
-            _itoa_s(ErrorItem->m_error_code, pItem->pszText, pItem->cchTextMax, 10);
+            _i64toa_s(ErrorItem->m_error_code, pItem->pszText, pItem->cchTextMax, 10);
             break;
           case CEL_SUBJECT:
             lstrcpyA(pItem->pszText, ErrorItem->m_subject.c_str());
@@ -294,10 +291,10 @@ void CResultListDlg::OnGetListDisplayInfoW(NMLVDISPINFOW* ListDisplayInfo)
       switch (pItem->iSubItem)
       {
         case 0:
-          _itow_s(ErrorItem->m_line, pItem->pszText, pItem->cchTextMax, 10);
+          _i64tow_s(ErrorItem->m_line_begin, pItem->pszText, pItem->cchTextMax, 10);
           break;
         case 1:
-          _itow_s(ErrorItem->m_column_begin, pItem->pszText, pItem->cchTextMax, 10);
+          _i64tow_s(ErrorItem->m_column_begin, pItem->pszText, pItem->cchTextMax, 10);
           break;
       }
     }
@@ -349,48 +346,43 @@ void CResultListDlg::Redraw()
 
   for (auto Error : *mErrors)
   {
-    if (Error.m_severity == SV_CRITICAL)
+    if (Error.m_severity == ERR_CRITICAL)
     {
       if (mErrorButton.IsChecked())
         mViewList.push_back(posError);
       ++countError;
     }
-    else if (Error.m_severity == SV_ERROR)
+    else if (Error.m_severity == ERR_ERROR)
     {
       if (mErrorButton.IsChecked())
         mViewList.push_back(posError);
       ++countError;
     }
-    else if (Error.m_severity == SV_WARNING)
+    else if (Error.m_severity == ERR_WARNING)
     {
       if (mWarningButton.IsChecked())
         mViewList.push_back(posError);
       ++countWarning;
     }
-    else if (Error.m_severity == SV_FORMAT)
+    else if (Error.m_severity == ERR_FORMAT)
     {
       if (mFormatButton.IsChecked())
         mViewList.push_back(posError);
       ++countFormat;
     }
-    else if (Error.m_severity == SV_IGNORED)
+    else if (Error.m_severity == ERR_IGNORED)
     {
       if (mIgnoreButton.IsChecked())
         mViewList.push_back(posError);
       ++countIgnored;
     }
-    else if (Error.m_severity == SV_DEBUG)
+    else if (Error.m_severity == DBG_DEBUG)
     {
       if (mDebugButton.IsChecked())
         mViewList.push_back(posError);
       ++countDebug;
     }
-    else if (Error.m_severity == SV_INFO)
-    {
-      if (mInfoVisible)
-        mViewList.push_back(posError);
-    }
-    else
+    else if (Error.m_severity & ERR_MASK)
     {
       mViewList.push_back(posError);
     }

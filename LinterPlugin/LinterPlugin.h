@@ -3,6 +3,7 @@
 #include "..\PluginCommon\NppPluginBase.h"
 #include "LinterManager.h"
 #include "ResultListDlg.h"
+#include "FunctionListCtrl.h"
 
 #include "LinterData.h"
 
@@ -16,7 +17,8 @@ public:
   virtual ~CLinterPlugin();
 
 public: //Interface
-  void ShowErrors(bool Force);
+  bool ShowErrors(bool Force);
+  void ShowFunctionMarkers(bool Force);
   void OnDocumentBigChange();
   void OnDocumentSmallChange(int Delay, bool ForceChanged);
   void FixEasyPeasy();
@@ -34,9 +36,12 @@ public: //Menu Command
   void OnMenuCheckDocument();
   static void OnMenuShowResultListDlgStatic() { Plugin->OnMenuShowResultListDlg(); };
   void OnMenuShowResultListDlg();
+  static void OnMenuShowFunctionListDlgStatic() { Plugin->OnMenuShowFunctionListDlg(); };
+  void OnMenuShowFunctionListDlg();
 
 protected: //Help functions
   void ClearErrors();
+  void ClearFunctionMarkers();
 
 protected: //CNppPluginBase Overrides
   virtual void OnMarginClick(int Modifiers, int64_t Position, int MarginId);
@@ -44,10 +49,13 @@ protected: //CNppPluginBase Overrides
   virtual void OnDwellEnd(int64_t Position, int x, int y);
 
 protected: //Variables
+  bool mInShowErrors = false;
   bool mPluginEnabled;
   int32_t mMarginId;
-  int32_t mMarkerId;  
+  int32_t mMarkerIdError;
+  int32_t mMarkerIdFunction;
   std::vector<SLintError> mErrors;
   CLinterManager mLintTester;
   CResultListDlg mResultListDlg;
+  CFunctionListCtrl mFunctionListCtrl;
 };

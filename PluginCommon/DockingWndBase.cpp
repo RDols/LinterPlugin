@@ -16,6 +16,15 @@ CDockingWndBase::CDockingWndBase(int DialogID, const TCHAR* WindowName)
   int NameLength = lstrlen(WindowName)+1;
   mWindowName = new TCHAR[NameLength];
   lstrcpy(mWindowName, WindowName);
+
+  mNppDialogData.pszName = mWindowName;
+  mNppDialogData.dlgID = mDialogID;
+  mNppDialogData.uMask = DWS_DF_CONT_BOTTOM;
+  mNppDialogData.hIconTab = 0;
+  mNppDialogData.pszAddInfo = NULL;
+  //data.rcFloat
+  //data.iPrevCont
+  mNppDialogData.pszModuleName = mWindowName;
 }
 
 CDockingWndBase::~CDockingWndBase()
@@ -41,14 +50,7 @@ void CDockingWndBase::Create()
   mWindowList[mHwnd] = this;
 
   mNppDialogData.hClient = mHwnd;
-  mNppDialogData.pszName = mWindowName;
-  mNppDialogData.dlgID = mDialogID;
-  mNppDialogData.uMask = DWS_DF_CONT_BOTTOM;
-  mNppDialogData.hIconTab = 0;
-  mNppDialogData.pszAddInfo = NULL;
-  //data.rcFloat
-  //data.iPrevCont
-  mNppDialogData.pszModuleName = mWindowName;
+
 
   ::SendMessage(mParent, NPPM_MODELESSDIALOG, MODELESSDIALOGADD, (LPARAM)mHwnd);
   ::SendMessage(mParent, NPPM_DMMREGASDCKDLG, 0, (LPARAM) &mNppDialogData);
@@ -86,6 +88,16 @@ INT_PTR CDockingWndBase::OnMessage(UINT message, WPARAM wParam, LPARAM lParam)
         NMITEMACTIVATE* ListItemActive = reinterpret_cast<NMITEMACTIVATE*>(notifyHeader);
         OnControlDoubleClick(ListItemActive);
       }
+      else if (notifyHeader->code == TVN_SELCHANGEDA)
+      {
+        NMTREEVIEWA* TreeItemActive = reinterpret_cast<NMTREEVIEWA*>(notifyHeader);
+        OnControlSelectionChangedA(TreeItemActive);
+      }
+      else
+      {
+        _RPT1(0, "notifyHeader->code %d %x\r\n", (int) notifyHeader->code, notifyHeader->code);
+      }
+      
       break;
     }
 

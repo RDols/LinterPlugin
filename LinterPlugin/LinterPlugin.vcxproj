@@ -192,6 +192,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <GenerateMapFile>true</GenerateMapFile>
       <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
+      <AdditionalDependencies>comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Ansi_Release|x64'">
@@ -214,6 +215,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <GenerateMapFile>true</GenerateMapFile>
       <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
+      <AdditionalDependencies>comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Unicode_Debug|Win32'">
@@ -266,6 +268,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <GenerateMapFile>true</GenerateMapFile>
       <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
+      <AdditionalDependencies>comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Ansi_Debug|x64'">
@@ -284,6 +287,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <GenerateMapFile>true</GenerateMapFile>
       <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
+      <AdditionalDependencies>comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Unicode_Release|Win32'">
@@ -335,16 +339,21 @@
     <ClInclude Include="..\PluginCommon\NppDllData.h" />
     <ClInclude Include="..\PluginCommon\NppPluginBase.h" />
     <ClInclude Include="DecoderBase.h" />
+    <ClInclude Include="DocWalker.h" />
+    <ClInclude Include="FunctionListCtrl.h" />
     <ClInclude Include="ImageButton.h" />
     <ClInclude Include="LinterData.h" />
     <ClInclude Include="LinterPlugin.h" />
     <ClInclude Include="ListCtrl.h" />
     <ClInclude Include="LinterManager.h" />
     <ClInclude Include="LuaCheckPlainDecoder.h" />
+    <ClInclude Include="LuaMarkers.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ResultListDlg.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="StringHelpers.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TreeCtrl.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\PluginCommon\DockingWndBase.cpp" />
@@ -352,11 +361,14 @@
     <ClCompile Include="..\PluginCommon\NppDll.cpp" />
     <ClCompile Include="..\PluginCommon\NppPluginBase.cpp" />
     <ClCompile Include="DecoderBase.cpp" />
+    <ClCompile Include="DocWalker.cpp" />
+    <ClCompile Include="FunctionListCtrl.cpp" />
     <ClCompile Include="ImageButton.cpp" />
     <ClCompile Include="LinterPlugin.cpp" />
     <ClCompile Include="ListCtrl.cpp" />
     <ClCompile Include="LinterManager.cpp" />
     <ClCompile Include="LuaCheckPlainDecoder.cpp" />
+    <ClCompile Include="LuaMarkers.cpp" />
     <ClCompile Include="ResultListDlg.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Unicode_Release|x64'">Create</PrecompiledHeader>
@@ -368,20 +380,29 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Unicode_Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Ansi_Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="TreeCtrl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LinterPlugin.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="resource\bitmap_lua_list.bmp" />
     <Image Include="Resource\Debug.bmp" />
     <Image Include="Resource\DebugDisabled.bmp" />
     <Image Include="Resource\Error.bmp" />
     <Image Include="Resource\ErrorDisabled.bmp" />
     <Image Include="Resource\Format.bmp" />
     <Image Include="Resource\FormatDisabled.bmp" />
+    <Image Include="Resource\funcList_leaf.bmp" />
+    <Image Include="Resource\funcList_leaf_blue.bmp" />
+    <Image Include="Resource\funcList_node.bmp" />
+    <Image Include="resource\icon1.ico" />
+    <Image Include="resource\icon2.ico" />
     <Image Include="Resource\Ignored.bmp" />
     <Image Include="Resource\IgnoredDisabled.bmp" />
     <Image Include="Resource\LuaLinter.bmp" />
+    <Image Include="Resource\LuaLinter32.bmp" />
+    <Image Include="Resource\TabFunctionList.ico" />
     <Image Include="Resource\Warning.bmp" />
     <Image Include="Resource\Warning.ico" />
     <Image Include="Resource\Warning.png" />

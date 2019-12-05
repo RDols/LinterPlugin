@@ -19,12 +19,14 @@ public:
   LRESULT SendApp(UINT Msg, WPARAM wParam = 0, LPARAM lParam = 0);
   void SetFocusToEditor();
 
+public:
+  std::string GetLineText(int line);
+  LRESULT GetPositionForLine(int line);
+
 protected: //Help functions
   bool AddMenuItem(int CmdID, const TCHAR *cmdName, PFUNCPLUGINCMD pFunc, SShortcutKey *sk, bool checkOnInit, int ResourceId);
   HWND GetScintillaHandle();
   std::string GetDocumentText();
-  std::string GetLineText(int line);
-  LRESULT GetPositionForLine(int line);
   std::wstring GetFilePart(unsigned int part);
   void SendToolbarIcons();
   int GetNppMenuId(int PluginId);

@@ -4,6 +4,7 @@
 #include "LinterManager.h"
 #include "LinterPlugin.h"
 #include "LuaCheckPlainDecoder.h"
+#include "LuaMarkers.h"
 
 #include <thread>
 #include <atlcomcli.h>
@@ -18,23 +19,37 @@ CLinterManager::CLinterManager()
   , mDelayCheckTimer(0)
   , mCurrentFileLanguage(L_EXTERNAL)
 {
-  SCommandInfo NewCommand;
-  NewCommand.LanguageType = L_LUA;
-  //NewCommand.LineType = LT_CHECK;
-  //NewCommand.Command = L"luacheck.exe --codes --ranges --formatter plain -d:\DoesntExist.tmp";
-  NewCommand.Command = L"%PLUGINDIR%luacheck.exe --codes --ranges --formatter plain - %STD%";
-  //NewCommand.Command = L"luacheck.exe --codes --ranges --formatter plain %FILE%";
-  //NewCommand.Command = L"D:\\lua\\luacheck.exe --formatter d:\\lua\\dolsexport";
-  //NewCommand.Command = L"D:\\lua\\luacheck.exe --codes --ranges --formatter plain";
-  NewCommand.OutputDecoder = new CLuaCheckPlainDecoder();
-  NewCommand.InlineDecoder = new CLuaCheckPlainDecoder(true);
-  mLinterCommands.push_back(NewCommand);
-
-  NewCommand.OutputDecoder = NULL;
-  NewCommand.InlineDecoder = NULL;
-  NewCommand.Command = L"%PLUGINDIR%lua-format.exe -si -c lua-format.cfg %STD%";
-  mFormatterCommands.push_back(NewCommand);
-
+  {
+    SCommandInfo NewCommand;
+    NewCommand.LanguageType = L_LUA;
+    NewCommand.CommandType = CT_CMD_LINE;
+    //NewCommand.LineType = LT_CHECK;
+    //NewCommand.Command = L"luacheck.exe --codes --ranges --formatter plain -d:\DoesntExist.tmp";
+    NewCommand.Command = L"%PLUGINDIR%luacheck.exe --codes --ranges --formatter plain - %STD%";
+    //NewCommand.Command = L"luacheck.exe --codes --ranges --formatter plain %FILE%";
+    //NewCommand.Command = L"D:\\lua\\luacheck.exe --formatter d:\\lua\\dolsexport";
+    //NewCommand.Command = L"D:\\lua\\luacheck.exe --codes --ranges --formatter plain";
+    NewCommand.OutputDecoder = new CLuaCheckPlainDecoder();
+    NewCommand.InlineDecoder = new CLuaCheckPlainDecoder(true);
+    mLinterCommands.push_back(NewCommand);
+  }
+  {
+    SCommandInfo NewCommand;
+    NewCommand.LanguageType = L_LUA;
+    NewCommand.CommandType = CT_CMD_LINE;
+    NewCommand.Command = L"%PLUGINDIR%lua-format.exe -si -c lua-format.cfg %STD%";
+    NewCommand.OutputDecoder = NULL;
+    NewCommand.InlineDecoder = NULL;
+    mFormatterCommands.push_back(NewCommand);
+  }
+  {
+    SCommandInfo NewCommand;
+    NewCommand.LanguageType = L_LUA;
+    NewCommand.CommandType = CT_DECODE_ONLY;
+    NewCommand.OutputDecoder = new CLuaMarkers();
+    NewCommand.InlineDecoder = NULL;
+    mLinterCommands.push_back(NewCommand);
+  }
   InitializeCriticalSection(&mCriticalSection_Busy);
   CoInitialize(0);
 }
@@ -81,8 +96,7 @@ void CLinterManager::FormatDocument(std::string& doctxt)
     if (it->LanguageType == mCurrentFileLanguage)
     {
       std::string OutputStringA;
-      std::string ErrorStringA;
-      ExecuteCommand(*it, mDocTxt, OutputStringA, ErrorStringA, mErrors);
+      ExecuteCommand(*it, mDocTxt, OutputStringA, mErrors);
       doctxt = OutputStringA;
     }
   }
@@ -129,8 +143,7 @@ void CLinterManager::_LintContent()
     if (it->LanguageType == mCurrentFileLanguage)
     {
       std::string OutputStringA;
-      std::string ErrorStringA;
-      ExecuteCommand(*it, mDocTxt, OutputStringA, ErrorStringA, mErrors);
+      ExecuteCommand(*it, mDocTxt, OutputStringA, mErrors);
       if (it->OutputDecoder->DecodeErrors(OutputStringA))
         mNewDataAvailable = true;
 
@@ -139,10 +152,9 @@ void CLinterManager::_LintContent()
       if (it->InlineDecoder)
       {
         OutputStringA.clear();
-        ErrorStringA.clear();
         std::string disabledOutputTxt;
         it->InlineDecoder->DisableInlines(mDocTxt, disabledOutputTxt);
-        ExecuteCommand(*it, disabledOutputTxt, OutputStringA, ErrorStringA, mErrors);
+        ExecuteCommand(*it, disabledOutputTxt, OutputStringA, mErrors);
         if (it->InlineDecoder->DecodeErrors(OutputStringA))
           mNewDataAvailable = true;
 
@@ -159,15 +171,29 @@ void CLinterManager::_LintContent()
   
 
   LeaveCriticalSection(&mCriticalSection_Busy);
-  //mParent->ShowErrors(false);
+
+  if (mNewDataAvailable)
+  {
+    NMHDR nmh;
+    nmh.code = LINTER_MSG_NEW_DATA;
+    nmh.idFrom = 0;
+    nmh.hwndFrom = 0;
+
+    mParent->SendApp(WM_NOTIFY, nmh.idFrom, (LPARAM)&nmh);
+  }
 }
 
-bool CLinterManager::ExecuteCommand(const SCommandInfo& CommandInfo, const std::string& DocTxt, std::string& OutputStringA, std::string ErrorStringA, std::vector<SLintError>& RuntimeErrorList)
+bool CLinterManager::ExecuteCommand(const SCommandInfo& CommandInfo, const std::string& DocTxt, std::string& OutputStringA, std::vector<SLintError>& RuntimeErrorList)
 {
+  if (CommandInfo.CommandType == CT_DECODE_ONLY)
+  {
+    OutputStringA = DocTxt;
+    return true;
+  }
+
   stringT CmdCommand(CommandInfo.Command);
   TCHAR TempFilePath[MAX_PATH];
   OutputStringA.clear();
-  ErrorStringA.clear();
 
   bool useStdInput(true);
   if (Replace(CmdCommand, _T("%STD%"), _T("")) == 0)
@@ -225,7 +251,7 @@ bool CLinterManager::ExecuteCommand(const SCommandInfo& CommandInfo, const std::
     char errMessage[256];
     /*DWORD errFormat =*/ FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, NULL, err, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), errMessage, 255, NULL);
     SLintError newErrorEntry;
-    newErrorEntry.m_severity = SV_DEBUG;
+    newErrorEntry.m_severity = DBG_DEBUG;
     newErrorEntry.m_error_code = err;
     newErrorEntry.m_subject = "CreateProcess";
     newErrorEntry.m_message = errMessage;
@@ -268,7 +294,7 @@ bool CLinterManager::ExecuteCommand(const SCommandInfo& CommandInfo, const std::
       char errMessage[256];
       /*DWORD errFormat =*/ FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, NULL, err, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), errMessage, 255, NULL);
       SLintError newErrorEntry;
-      newErrorEntry.m_severity = SV_DEBUG;
+      newErrorEntry.m_severity = DBG_DEBUG;
       newErrorEntry.m_error_code = err;
       newErrorEntry.m_subject = "ReadFile output";
       newErrorEntry.m_message = errMessage;
@@ -290,14 +316,13 @@ bool CLinterManager::ExecuteCommand(const SCommandInfo& CommandInfo, const std::
       char errMessage[256];
       /*DWORD errFormat =*/ FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, NULL, err, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), errMessage, 255, NULL);
       SLintError newErrorEntry;
-      newErrorEntry.m_severity = SV_DEBUG;
+      newErrorEntry.m_severity = DBG_DEBUG;
       newErrorEntry.m_error_code = err;
       newErrorEntry.m_subject = "ReadFile error";
       newErrorEntry.m_message = errMessage;
       RuntimeErrorList.push_back(newErrorEntry);
       break;
     }
-    ErrorStringA += std::string(&buffer[0], readBytes);
   }
 
   //close output
@@ -307,12 +332,8 @@ bool CLinterManager::ExecuteCommand(const SCommandInfo& CommandInfo, const std::
   DWORD exitCode(0);
   if (GetExitCodeProcess(processInfo.hProcess, &exitCode))
   {
-    std::stringstream ErrorTxt;
-    ErrorTxt << "Process ended with exitcode: " << exitCode << "\r\n";
-    ErrorStringA.append(ErrorTxt.str());
-
     SLintError newErrorEntry;
-    newErrorEntry.m_severity = SV_DEBUG;
+    newErrorEntry.m_severity = DBG_DEBUG;
     newErrorEntry.m_error_code = exitCode;
     newErrorEntry.m_subject = "GetExitCodeProcess";
     newErrorEntry.m_message = "Process normally ended with exitcode.";
@@ -324,7 +345,7 @@ bool CLinterManager::ExecuteCommand(const SCommandInfo& CommandInfo, const std::
     char errMessage[256];
     /*DWORD errFormat =*/ FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, NULL, err, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), errMessage, 255, NULL);
     SLintError newErrorEntry;
-    newErrorEntry.m_severity = SV_DEBUG;
+    newErrorEntry.m_severity = DBG_DEBUG;
     newErrorEntry.m_error_code = err;
     newErrorEntry.m_subject = "GetExitCodeProcess";
     newErrorEntry.m_message = errMessage;

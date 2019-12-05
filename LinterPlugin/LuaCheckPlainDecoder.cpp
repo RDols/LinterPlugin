@@ -82,7 +82,8 @@ void CLuaCheckPlainDecoder::DecodeErrorsFromPlainLine(char*& readPos, const char
     if (readPos <= stringEnd)
     {
       SLintError newErrorEntry;
-      newErrorEntry.m_line = atoi(posLineNr);
+      newErrorEntry.m_line_begin = atoi(posLineNr);
+      newErrorEntry.m_line_end = newErrorEntry.m_line_begin;
       newErrorEntry.m_column_begin = atoi(posColumnBegin);
       newErrorEntry.m_column_end = atoi(posColumnEnd) + 1;
       newErrorEntry.m_error_code = atoi(posCode + 1);
@@ -138,9 +139,9 @@ void CLuaCheckPlainDecoder::DecodeErrorsFromPlainFindLineStart(char*& readPos, c
 void CLuaCheckPlainDecoder::DecodeErrorsFromPlainGetSeverity(SLintError& newErrorEntry)
 {
   if (newErrorEntry.m_error_code < 100)
-    newErrorEntry.m_severity = SV_ERROR;
+    newErrorEntry.m_severity = ERR_ERROR;
   else if (newErrorEntry.m_error_code >= 600 && newErrorEntry.m_error_code < 800)
-    newErrorEntry.m_severity = SV_FORMAT;
+    newErrorEntry.m_severity = ERR_FORMAT;
   else
-    newErrorEntry.m_severity = SV_WARNING;
+    newErrorEntry.m_severity = ERR_WARNING;
 }
