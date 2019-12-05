@@ -23,12 +23,13 @@ protected: //CDockingWndIface overrides
 
 protected: //Messages
   virtual void OnInitDialog() {};
-  virtual void OnControlClick(int ResourceId, HWND ControlWnd) {};
-  virtual void OnContextMenu(HWND ControlWnd, int x, int y) {};
-  virtual void OnSize(UINT nType, int cx, int cy) {};
-  virtual void OnGetListDisplayInfoA(NMLVDISPINFOA* ListDisplayInfo) {};
-  virtual void OnGetListDisplayInfoW(NMLVDISPINFOW* ListDisplayInfo) {};
-  virtual void OnControlDoubleClick(NMITEMACTIVATE* ListItemActive) {};
+  virtual void OnControlClick(int /*ResourceId*/, HWND /*ControlWnd*/) {};
+  virtual void OnContextMenu(HWND /*ControlWnd*/, int /*x*/, int /*y*/) {};
+  virtual void OnSize(UINT /*nType*/, int /*cx*/, int /*cy*/) {};
+  virtual void OnGetListDisplayInfoA(NMLVDISPINFOA* /*ListDisplayInfo*/) {};
+  virtual void OnGetListDisplayInfoW(NMLVDISPINFOW* /*ListDisplayInfo*/) {};
+  virtual void OnControlDoubleClick(NMITEMACTIVATE* /*ListItemActive*/) {};
+  virtual void OnControlSelectionChangedA(NMTREEVIEWA* /*TreeItemActive*/) {};
 
 protected: //Help functions
 

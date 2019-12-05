@@ -31,7 +31,7 @@ bool CDecoderBase::DecodeErrors(const std::string& Output)
   buffer[bufferSize - 1] = 0;
 
   DocodeString(buffer, bufferSize);
-  delete buffer;
+  delete [] buffer;
 
   if (mErrors.size() != mErrorsNew.size())
     mErrorsHaveChanged = true;
@@ -52,7 +52,7 @@ bool CDecoderBase::DisableInlines(const std::string& Output, std::string& Disabl
 
   DisabledOutput = buffer;
 
-  delete buffer;
+  delete [] buffer;
 
   return false;
 }

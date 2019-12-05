@@ -235,7 +235,7 @@ void CLinterPlugin::ShowErrors(bool Force)
   SendEditor(SCI_SETINDICATORCURRENT, oldid);
 }
 
-int CLinterPlugin::utfOffset(const std::string utf8, int unicodeOffset)
+int CLinterPlugin::utfOffset(const std::string utf8, int64_t unicodeOffset)
 {
   int result = 0;
   std::string::const_iterator i = utf8.begin(), end = utf8.end();
@@ -260,7 +260,7 @@ int CLinterPlugin::utfOffset(const std::string utf8, int unicodeOffset)
 }
 
 
-void CLinterPlugin::OnMarginClick(int Modifiers, int Position, int MarginId)
+void CLinterPlugin::OnMarginClick(int /*Modifiers*/, int64_t Position, int MarginId)
 {
   if (MarginId != mMarginId) return;
 
@@ -274,7 +274,7 @@ void CLinterPlugin::OnMarginClick(int Modifiers, int Position, int MarginId)
     ::SendMessage(hScintilla, SCI_MARKERADD, LineNr, mMarkerId);
 }
 
-void CLinterPlugin::OnDwellStart(int Position, int x, int y)
+void CLinterPlugin::OnDwellStart(int64_t Position, int /*x*/, int /*y*/)
 {
   if (Position < 0) return;
 
@@ -289,7 +289,7 @@ void CLinterPlugin::OnDwellStart(int Position, int x, int y)
   }
 }
 
-void CLinterPlugin::OnDwellEnd(int Position, int x, int y)
+void CLinterPlugin::OnDwellEnd(int64_t /*Position*/, int /*x*/, int /*y*/)
 {
   HWND hScintilla = GetScintillaHandle();
   ::SendMessage(hScintilla, SCI_CALLTIPCANCEL, 0, 0);

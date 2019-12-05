@@ -70,7 +70,7 @@ void CResultListDlg::Create()
   mErrorList.SetItemCountEx((int)mErrors->size(), LVSICF_NOSCROLL);
 }
 
-void CResultListDlg::OnControlClick(int ResourceId, HWND ControlWnd)
+void CResultListDlg::OnControlClick(int /*ResourceId*/, HWND ControlWnd)
 {
   bool Redraw(false);
 
@@ -208,7 +208,7 @@ void CResultListDlg::OnContextMenu(HWND ControlWnd, int x, int y)
   }
 }
 
-void CResultListDlg::OnSize(UINT nType, int cx, int cy)
+void CResultListDlg::OnSize(UINT /*nType*/, int cx, int cy)
 {
   mErrorList.MoveWindow(0, 30, cx, cy - 30);
 }
@@ -216,7 +216,7 @@ void CResultListDlg::OnSize(UINT nType, int cx, int cy)
 void CResultListDlg::OnGetListDisplayInfoA(NMLVDISPINFOA* ListDisplayInfo)
 {
   LVITEMA* pItem = &(ListDisplayInfo)->item;
-  int iItem = pItem->iItem;
+  //int iItem = pItem->iItem;
 
   if (ListDisplayInfo->hdr.hwndFrom == mErrorList.m_hWnd)
   {
@@ -281,7 +281,7 @@ void CResultListDlg::OnGetListDisplayInfoA(NMLVDISPINFOA* ListDisplayInfo)
 void CResultListDlg::OnGetListDisplayInfoW(NMLVDISPINFOW* ListDisplayInfo)
 {
   LVITEMW* pItem = &(ListDisplayInfo)->item;
-  int iItem = pItem->iItem;
+  //int iItem = pItem->iItem;
 
   if (ListDisplayInfo->hdr.hwndFrom == mErrorList.m_hWnd)
   {
@@ -337,7 +337,7 @@ void CResultListDlg::Redraw()
 {
   int posError = 0;
   mViewList.clear();
-  int countTotal(0);
+  //int countTotal(0);
   int countError(0);
   int countWarning(0);
   int countFormat(0);

@@ -33,9 +33,9 @@ public: // Help functions
   HANDLE GetDllHandle() { return mDllHandle; };
 
 protected: //Virtuals
-  virtual void OnMarginClick(int Modifiers, int Position, int MarginId) {};
-  virtual void OnDwellStart(int Position, int x, int y) {};
-  virtual void OnDwellEnd(int Position, int x, int y) {};
+  virtual void OnMarginClick(int /*Modifiers*/, int64_t /*Position*/, int /*MarginId*/) {};
+  virtual void OnDwellStart(int64_t /*Position*/, int /*x*/, int /*y*/) {};
+  virtual void OnDwellEnd(int64_t /*Position*/, int /*x*/, int /*y*/) {};
 
 public: //INppDll overrides
   virtual void PluginInit(HMODULE Module);
@@ -44,7 +44,7 @@ public: //INppDll overrides
   virtual const TCHAR * getName() { return mPluginName.c_str(); };
   virtual SFuncItem * getFuncsArray(int* Count);
   virtual void beNotified(SCNotification* Notification);
-  virtual LRESULT messageProc(UINT Message, WPARAM wParam, LPARAM lParam) { return 0; };
+  virtual LRESULT messageProc(UINT /*Message*/, WPARAM /*wParam*/, LPARAM /*lParam*/) { return 0; };
 
 protected: //Variables
   HMODULE mDllHandle;

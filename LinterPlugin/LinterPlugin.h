@@ -21,7 +21,7 @@ public: //Interface
   void OnDocumentSmallChange(int Delay, bool ForceChanged);
   void FixEasyPeasy();
   void FormatDocument();
-  static int utfOffset(const std::string utf8, int unicodeOffset);
+  static int utfOffset(const std::string utf8, int64_t unicodeOffset);
 
 public: //INppDll overrides
   virtual void PluginInit(HMODULE Module);
@@ -39,9 +39,9 @@ protected: //Help functions
   void ClearErrors();
 
 protected: //CNppPluginBase Overrides
-  virtual void OnMarginClick(int Modifiers, int Position, int MarginId);
-  virtual void OnDwellStart(int Position, int x, int y);
-  virtual void OnDwellEnd(int Position, int x, int y);
+  virtual void OnMarginClick(int Modifiers, int64_t Position, int MarginId);
+  virtual void OnDwellStart(int64_t Position, int x, int y);
+  virtual void OnDwellEnd(int64_t Position, int x, int y);
 
 protected: //Variables
   bool mPluginEnabled;

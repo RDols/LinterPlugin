@@ -103,7 +103,7 @@ void CLinterManager::LintContent(const std::string& doctxt, int Delay, bool Forc
   CreateTimerQueueTimer(&mDelayCheckTimer, NULL, (WAITORTIMERCALLBACK)CLinterManager::StartCheckThread, this, Delay*1000, 0, 0);
 }
 
-VOID CALLBACK CLinterManager::StartCheckThread(PVOID lpParam, BOOLEAN TimerOrWaitFired)
+VOID CALLBACK CLinterManager::StartCheckThread(PVOID lpParam, BOOLEAN /*TimerOrWaitFired*/)
 {
   std::thread WorkerThread(CLinterManager::OnCheckThreadStart, lpParam);
   WorkerThread.detach();
@@ -223,7 +223,7 @@ bool CLinterManager::ExecuteCommand(const SCommandInfo& CommandInfo, const std::
     //Cannot execute command. CmdCommand is incorrect.
     DWORD err = GetLastError();
     char errMessage[256];
-    DWORD errFormat = FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, NULL, err, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), errMessage, 255, NULL);
+    /*DWORD errFormat =*/ FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, NULL, err, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), errMessage, 255, NULL);
     SLintError newErrorEntry;
     newErrorEntry.m_severity = SV_DEBUG;
     newErrorEntry.m_error_code = err;
@@ -266,7 +266,7 @@ bool CLinterManager::ExecuteCommand(const SCommandInfo& CommandInfo, const std::
 
       DWORD err = GetLastError();
       char errMessage[256];
-      DWORD errFormat = FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, NULL, err, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), errMessage, 255, NULL);
+      /*DWORD errFormat =*/ FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, NULL, err, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), errMessage, 255, NULL);
       SLintError newErrorEntry;
       newErrorEntry.m_severity = SV_DEBUG;
       newErrorEntry.m_error_code = err;
@@ -288,7 +288,7 @@ bool CLinterManager::ExecuteCommand(const SCommandInfo& CommandInfo, const std::
 
       DWORD err = GetLastError();
       char errMessage[256];
-      DWORD errFormat = FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, NULL, err, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), errMessage, 255, NULL);
+      /*DWORD errFormat =*/ FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, NULL, err, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), errMessage, 255, NULL);
       SLintError newErrorEntry;
       newErrorEntry.m_severity = SV_DEBUG;
       newErrorEntry.m_error_code = err;
@@ -322,7 +322,7 @@ bool CLinterManager::ExecuteCommand(const SCommandInfo& CommandInfo, const std::
   {
     DWORD err = GetLastError();
     char errMessage[256];
-    DWORD errFormat = FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, NULL, err, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), errMessage, 255, NULL);
+    /*DWORD errFormat =*/ FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, NULL, err, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), errMessage, 255, NULL);
     SLintError newErrorEntry;
     newErrorEntry.m_severity = SV_DEBUG;
     newErrorEntry.m_error_code = err;
