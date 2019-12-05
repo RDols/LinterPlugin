@@ -229,10 +229,6 @@ void CLinterPlugin::ClearErrors()
   SendEditor(SCI_INDICATORCLEARRANGE, 0, length);
   SendEditor(SCI_SETINDICATORCURRENT, oldid);
 
-  //SendEditor(SCI_SETINDICATORCURRENT, INDICATOR_STYLE_ID_HIGHLIGHT);
-  //SendEditor(SCI_INDICATORCLEARRANGE, 0, length);
-  //SendEditor(SCI_SETINDICATORCURRENT, oldid);
-
   SendEditor(SCI_MARKERDELETEALL, mMarkerIdError);
   //SendEditor(SCI_ANNOTATIONCLEARALL); //very slow and not needed at the moment.
 }
@@ -268,9 +264,6 @@ bool CLinterPlugin::ShowErrors(bool Force)
   SendEditor(SCI_INDICSETSTYLE, INDICATOR_STYLE_ID_WARNING, INDIC_BOX);  // INDIC_SQUIGGLE);
   SendEditor(SCI_INDICSETFORE, INDICATOR_STYLE_ID_WARNING, 0x0000ff);
   SendEditor(SCI_SETINDICATORCURRENT, INDICATOR_STYLE_ID_WARNING);
-  //  SendEditor(SCI_INDICSETSTYLE, INDICATOR_STYLE_ID_WARNING, INDIC_ROUNDBOX);
-  //  SendEditor(SCI_INDICSETALPHA, INDICATOR_STYLE_ID_WARNING, settings.m_alpha);
-  //  SendEditor(SCI_INDICSETFORE, INDICATOR_STYLE_ID_WARNING, settings.m_color);
 
   for (auto viewError : viewList)
   {
@@ -281,17 +274,7 @@ bool CLinterPlugin::ShowErrors(bool Force)
     mErrors[viewError].m_position_end += utfOffset(GetLineText((int32_t) mErrors[viewError].m_line_end - 1), mErrors[viewError].m_column_end - 1);
     SendEditor(SCI_INDICATORFILLRANGE, mErrors[viewError].m_position_begin, (mErrors[viewError].m_position_end - mErrors[viewError].m_position_begin));
   }
-/*
-  for (std::vector<SLintError>::iterator it = mErrors.begin(); it != mErrors.end(); it++)
-  {
-    SendEditor(SCI_MARKERADD, it->m_line - 1, mMarkerIdError);
-    it->m_position_begin = (int)GetPositionForLine(it->m_line - 1);
-    it->m_position_end = it->m_position_begin;
-    it->m_position_begin += utfOffset(GetLineText(it->m_line - 1), it->m_column_begin - 1);
-    it->m_position_end += utfOffset(GetLineText(it->m_line - 1), it->m_column_end - 1);
-    SendEditor(SCI_INDICATORFILLRANGE, it->m_position_begin, (it->m_position_end - it->m_position_begin));
-  }
-  */
+
   SendEditor(SCI_SETINDICATORCURRENT, oldid);
 
   ShowFunctionMarkers(false);
