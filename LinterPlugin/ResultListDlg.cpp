@@ -52,6 +52,7 @@ void CResultListDlg::Create()
 
   mButtonFixEasyPeasy = GetDlgItem(mHwnd, IDC_BUTTON_EASYPEASY);
   mButtonFormatDocument = GetDlgItem(mHwnd, IDC_BUTTON_FORMAT);
+  mButtonRefresh = GetDlgItem(mHwnd, IDC_BUTTON_REFRESH);
 
   mErrorList.m_hWnd = GetDlgItem(mHwnd, IDC_LIST_ERRORS);
   ::SendMessage(mErrorList.m_hWnd, WM_NOTIFYFORMAT, (WPARAM) mParent, NF_REQUERY);
@@ -103,6 +104,8 @@ void CResultListDlg::OnControlClick(int /*ResourceId*/, HWND ControlWnd)
     mParent->FixEasyPeasy();
   else if (ControlWnd == mButtonFormatDocument)
     mParent->FormatDocument();
+  else if (ControlWnd == mButtonRefresh)
+    mParent->OnDocumentBigChange();
 
   if (Redraw)
     mParent->ShowErrors(true);

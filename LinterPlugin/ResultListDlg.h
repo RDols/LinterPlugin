@@ -41,6 +41,7 @@ protected:
 
   HWND mButtonFixEasyPeasy;
   HWND mButtonFormatDocument;
+  HWND mButtonRefresh;
 
   //HWND mListHandle;
   CListCtrl mErrorList;
