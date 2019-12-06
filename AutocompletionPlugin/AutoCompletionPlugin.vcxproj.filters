@@ -41,6 +41,9 @@
     <ClInclude Include="targetver.h">
       <Filter>Source Files\10 Main</Filter>
     </ClInclude>
+    <ClInclude Include="..\PluginCommon\json.hpp">
+      <Filter>Source Files\60 PluginCommon</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\PluginCommon\NppDll.cpp">

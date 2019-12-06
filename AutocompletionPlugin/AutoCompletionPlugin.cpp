@@ -12,7 +12,8 @@ INppDll* nppDll = Plugin;
 
 CAutoCompletionPlugin::CAutoCompletionPlugin()
 {
-  mPluginName = _T("AutoCompletion");
+  mPluginName = L"AutoCompletion";
+  mPluginShortName = "AutoCompletion";
   mPluginEnabled = false;
   AddMenuItem(PLUGIN_MENU_ENABLE, _T("Enable"), CAutoCompletionPlugin::EnablePluginStatic, NULL, true, 0);
 }

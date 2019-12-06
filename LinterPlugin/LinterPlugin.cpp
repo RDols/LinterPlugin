@@ -20,13 +20,14 @@ INppDll* nppDll = Plugin;
 #define PLUGIN_MENU_ENABLE              2
 #define PLUGIN_MENU_CHECK_DOCUMENT      3
 #define PLUGIN_MENU_SHOW_RESULT_LIST    4
-#define PLUGIN_MENU_SHOW_FUNCTION_LIST  IDD_LINTER_FUNCTION_CTRL
+#define PLUGIN_MENU_SHOW_FUNCTION_LIST  5
 
 CLinterPlugin::CLinterPlugin()
   : mResultListDlg(this)
   , mFunctionListCtrl(this)
 {
-  mPluginName = _T("Linter Plugin");
+  mPluginName = L"Linter Plugin";
+  mPluginShortName = "LinterPlugin";
   //AddMenuItem(PLUGIN_MENU_SEPERATOR, _T(""), PLUGIN_MENU_SEPERATOR_FUNCTION, NULL, false, 0);
   AddMenuItem(PLUGIN_MENU_ENABLE, _T("Enable"), CLinterPlugin::EnablePluginStatic, NULL, false, 0);
   AddMenuItem(PLUGIN_MENU_CHECK_DOCUMENT, _T("Check Document"), CLinterPlugin::OnMenuCheckDocumentStatic, NULL, false, 0);
@@ -116,8 +117,11 @@ void CLinterPlugin::EnablePlugin()
     mLintTester.StopErrorChecking();
   }
 
-  //mFunctionListCtrl.Init((HINSTANCE)mDllHandle, mNppData.NppHandle);
-  //mFunctionListCtrl.Create();
+  if (mConfig["LinterListVisible"])
+    OnMenuShowResultListDlg();
+  
+  if (mConfig["FunctionListVisible"])
+    OnMenuShowFunctionListDlg();
 
   SendApp(NPPM_SETMENUITEMCHECK, GetNppMenuId(PLUGIN_MENU_ENABLE), mPluginEnabled ? TRUE : FALSE);
 }
@@ -155,7 +159,6 @@ void CLinterPlugin::OnMenuShowFunctionListDlg()
     mFunctionListCtrl.Init((HINSTANCE)mDllHandle, mNppData.NppHandle);
     mFunctionListCtrl.Create();
     mFunctionListCtrl.Redraw();
-    return;
   }
   if (mFunctionListCtrl.isVisible())
   {
@@ -355,3 +358,11 @@ void CLinterPlugin::OnDwellEnd(int64_t /*Position*/, int /*x*/, int /*y*/)
   ::SendMessage(hScintilla, SCI_CALLTIPCANCEL, 0, 0);
 }
 
+
+
+void CLinterPlugin::OnShutDown()
+{
+  mConfig["LinterListVisible"] = mResultListDlg.isVisible();
+  mConfig["FunctionListVisible"] = mFunctionListCtrl.isVisible();
+  WritePluginConfigFile();
+}

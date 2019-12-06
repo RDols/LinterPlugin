@@ -4,7 +4,7 @@
 #include "../notepad-plus-plus/PowerEditor/src/MISC/PluginsManager/Notepad_plus_msgs.h"
 #include "../notepad-plus-plus/PowerEditor/src/menuCmdID.h"
 
-
+#include "json.hpp"
 
 #include <string>
 
@@ -33,11 +33,14 @@ protected: //Help functions
 
 public: // Help functions
   HANDLE GetDllHandle() { return mDllHandle; };
+  void ReadPluginConfigFile();
+  void WritePluginConfigFile();
 
 protected: //Virtuals
   virtual void OnMarginClick(int /*Modifiers*/, int64_t /*Position*/, int /*MarginId*/) {};
   virtual void OnDwellStart(int64_t /*Position*/, int /*x*/, int /*y*/) {};
   virtual void OnDwellEnd(int64_t /*Position*/, int /*x*/, int /*y*/) {};
+  virtual void OnShutDown() {};
 
 public: //INppDll overrides
   virtual void PluginInit(HMODULE Module);
@@ -48,10 +51,17 @@ public: //INppDll overrides
   virtual void beNotified(SCNotification* Notification);
   virtual LRESULT messageProc(UINT /*Message*/, WPARAM /*wParam*/, LPARAM /*lParam*/) { return 0; };
 
+
+public:
+  nlohmann::json mConfig;
+
+
 protected: //Variables
   HMODULE mDllHandle;
   SNppData mNppData;
   stringT mPluginName;
+  std::string mPluginShortName;
+  std::string mConfigFile;
   TCHAR mModulePath[MAX_PATH];
   TCHAR mModuleFile[MAX_PATH];
   std::vector<SFuncItem> mMenuItems; //Menu items

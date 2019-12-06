@@ -326,6 +326,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\PluginCommon\json.hpp" />
     <ClInclude Include="..\PluginCommon\NppDll.h" />
     <ClInclude Include="..\PluginCommon\NppDllData.h" />
     <ClInclude Include="..\PluginCommon\NppPluginBase.h" />

@@ -4,10 +4,13 @@
 #include "NppPluginBase.h"
 #include "resource.h"
 
+#include <fstream>
+
 CNppPluginBase::CNppPluginBase()
   : mDllHandle(0)
 {
   mPluginName = _T("Plugin Without Name");
+  mPluginShortName = "PluginWithoutName"; //and without spaces etc
 }
 
 CNppPluginBase::~CNppPluginBase()
@@ -155,6 +158,29 @@ void CNppPluginBase::PluginInit(HMODULE Module)
   _tmakepath_s(mModulePath, MAX_PATH, drive, dir, NULL, NULL);
 }
 
+void CNppPluginBase::ReadPluginConfigFile()
+{
+  int64_t pathsize = SendApp(NPPM_GETPLUGINSCONFIGDIR);
+  std::wstring ConfigPathW;
+  ConfigPathW.append(pathsize+1, '\0');
+  SendApp(NPPM_GETPLUGINSCONFIGDIR, (WPARAM)ConfigPathW.size(), (LPARAM)ConfigPathW.data());
+  ConfigPathW.resize(pathsize);
+
+  mConfigFile = std::string(ConfigPathW.begin(), ConfigPathW.end()) + "\\" + mPluginShortName + ".config.json";
+
+  std::ifstream in(mConfigFile);
+  if (in.is_open())
+  {
+    in >> mConfig;
+  }
+}
+
+void CNppPluginBase::WritePluginConfigFile()
+{
+  std::ofstream configfile(mConfigFile);
+  configfile << mConfig.dump(4) << std::endl;
+}
+
 SFuncItem* CNppPluginBase::getFuncsArray(int* Count)
 {
   *Count = (int)mMenuItems.size();
@@ -166,6 +192,7 @@ void CNppPluginBase::beNotified(SCNotification* Notification)
   switch (Notification->nmhdr.code)
   {
     case NPPN_TBMODIFICATION:
+      ReadPluginConfigFile();
       SendToolbarIcons();
       break;
     case SCN_MARGINCLICK:
@@ -184,6 +211,9 @@ void CNppPluginBase::beNotified(SCNotification* Notification)
     case SCN_PAINTED:
       //case SCN_FOCUSIN:
       //case SCN_FOCUSOUT:
+      break;
+    case NPPN_SHUTDOWN:
+      OnShutDown();
       break;
     default:
       break;
