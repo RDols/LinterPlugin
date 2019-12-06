@@ -34,12 +34,12 @@ protected: //Messages
 protected: //Help functions
 
 protected: //Variables
-  bool mVisible;
+  bool mVisible = false;
   int mDialogID;
   tTbData mNppDialogData;
-  TCHAR* mWindowName;
-  HINSTANCE mNPP;
-  HWND mParent;
-  HWND mHwnd;
+  TCHAR* mWindowName = nullptr;
+  HINSTANCE mNPP = 0;
+  HWND mParent = 0;
+  HWND mHwnd = 0;
 
 };

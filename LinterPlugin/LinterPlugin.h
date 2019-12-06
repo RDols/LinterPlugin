@@ -44,9 +44,10 @@ protected: //Help functions
   void ClearFunctionMarkers();
 
 protected: //CNppPluginBase Overrides
-  virtual void OnMarginClick(int Modifiers, int64_t Position, int MarginId);
-  virtual void OnDwellStart(int64_t Position, int x, int y);
-  virtual void OnDwellEnd(int64_t Position, int x, int y);
+  void OnMarginClick(int Modifiers, int64_t Position, int MarginId) override;
+  void OnDwellStart(int64_t Position, int x, int y) override;
+  void OnDwellEnd(int64_t Position, int x, int y) override;
+  void OnShutDown() override;
 
 protected: //Variables
   bool mInShowErrors = false;

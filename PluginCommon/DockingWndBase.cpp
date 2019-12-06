@@ -10,8 +10,6 @@
 
 CDockingWndBase::CDockingWndBase(int DialogID, const TCHAR* WindowName)
   : mDialogID(DialogID)
-  , mHwnd(0)
-  , mVisible(false)
 {
   int NameLength = lstrlen(WindowName)+1;
   mWindowName = new TCHAR[NameLength];
@@ -50,7 +48,6 @@ void CDockingWndBase::Create()
   mWindowList[mHwnd] = this;
 
   mNppDialogData.hClient = mHwnd;
-
 
   ::SendMessage(mParent, NPPM_MODELESSDIALOG, MODELESSDIALOGADD, (LPARAM)mHwnd);
   ::SendMessage(mParent, NPPM_DMMREGASDCKDLG, 0, (LPARAM) &mNppDialogData);
