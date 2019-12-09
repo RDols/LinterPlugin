@@ -60,13 +60,15 @@ int32_t CRadioGroup::GetCheckId()
     HWND hWnd = GetDlgItem(mParent, it.first);
     if (hWnd > 0)
     {
-      int32_t value = ::SendMessage(hWnd, BM_GETCHECK, 0, 0);
+      int32_t value = (int32_t) ::SendMessage(hWnd, BM_GETCHECK, 0, 0);
       if (value == BST_CHECKED)
       {
         return it.first;
       }
     }
   }
+
+  return mDefaultId;
 }
 
 std::string CRadioGroup::GetCheckName()

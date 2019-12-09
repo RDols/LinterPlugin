@@ -161,6 +161,6 @@ bool CDockingWndBase::GetCheck(int32_t nIDDlgItem)
   if (hWnd == 0)
     return false;
 
-  int32_t value = ::SendMessage(hWnd, BM_GETCHECK, 0, 0);
+  int32_t value = (int32_t) ::SendMessage(hWnd, BM_GETCHECK, 0, 0);
   return value == BST_CHECKED;
 }
