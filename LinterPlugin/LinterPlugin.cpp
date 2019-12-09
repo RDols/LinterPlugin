@@ -284,14 +284,6 @@ void CLinterPlugin::ClearErrors()
 
 void CLinterPlugin::ClearFunctionMarkers()
 {
-	LRESULT length = SendEditor(SCI_GETLENGTH);
-
-	LRESULT oldid = SendEditor(SCI_GETINDICATORCURRENT);
-
-	SendEditor(SCI_SETINDICATORCURRENT, INDICATOR_STYLE_ID_WARNING);
-	SendEditor(SCI_INDICATORCLEARRANGE, 0, length);
-	SendEditor(SCI_SETINDICATORCURRENT, oldid);
-
 	SendEditor(SCI_MARKERDELETEALL, mMarkerIdFunction);
 }
 
@@ -320,10 +312,8 @@ bool CLinterPlugin::ShowErrors(bool Force)
   {
     if (showMarkers)
       SendEditor(SCI_MARKERADD, mErrors[viewError].m_line_begin - 1, mMarkerIdError);
-    mErrors[viewError].m_position_begin = GetPositionForLine((int32_t) mErrors[viewError].m_line_begin - 1);
-    mErrors[viewError].m_position_begin += utfOffset(GetLineText((int32_t)mErrors[viewError].m_line_begin - 1), mErrors[viewError].m_column_begin - 1);
-    mErrors[viewError].m_position_end = GetPositionForLine((int32_t) mErrors[viewError].m_line_end - 1);
-    mErrors[viewError].m_position_end += utfOffset(GetLineText((int32_t) mErrors[viewError].m_line_end - 1), mErrors[viewError].m_column_end - 1);
+    mErrors[viewError].m_position_begin = GetPositionFromXY(mErrors[viewError].m_line_begin, mErrors[viewError].m_column_begin);
+    mErrors[viewError].m_position_end = GetPositionFromXY(mErrors[viewError].m_line_end, mErrors[viewError].m_column_end);
     SendEditor(SCI_INDICATORFILLRANGE, mErrors[viewError].m_position_begin, (mErrors[viewError].m_position_end - mErrors[viewError].m_position_begin));
   }
 
