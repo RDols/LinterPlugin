@@ -36,32 +36,28 @@ CDockingWndBase::~CDockingWndBase()
   }
 }
 
-void CDockingWndBase::Init(HINSTANCE hInst, HWND parent)
+//void CDockingWndBase::Init(HINSTANCE hInst, HWND parent)
+void CDockingWndBase::Init(HINSTANCE dllHandle, HWND nppHandle)
 {
-  mNPP = hInst;
-  mParent = parent;
+  mDllHandle = dllHandle;
+  mNppHandle = nppHandle;
 }
 
 void CDockingWndBase::Create()
 {
-  mHwnd = ::CreateDialogParam(mNPP, MAKEINTRESOURCE(mDialogID), mParent, CDockingWndIface::OnMessageStatic, reinterpret_cast<LPARAM>(this));
+  mHwnd = ::CreateDialogParam(mDllHandle, MAKEINTRESOURCE(mDialogID), mNppHandle, CDockingWndIface::OnMessageStatic, reinterpret_cast<LPARAM>(this));
   mWindowList[mHwnd] = this;
 
   mNppDialogData.hClient = mHwnd;
 
-  ::SendMessage(mParent, NPPM_MODELESSDIALOG, MODELESSDIALOGADD, (LPARAM)mHwnd);
-  ::SendMessage(mParent, NPPM_DMMREGASDCKDLG, 0, (LPARAM) &mNppDialogData);
+  ::SendMessage(mNppHandle, NPPM_MODELESSDIALOG, MODELESSDIALOGADD, (LPARAM)mHwnd);
+  ::SendMessage(mNppHandle, NPPM_DMMREGASDCKDLG, 0, (LPARAM) &mNppDialogData);
 }
 
 INT_PTR CDockingWndBase::OnMessage(UINT message, WPARAM wParam, LPARAM lParam)
 {
   switch (message)
   {
-    case WM_INITDIALOG:
-      OnInitDialog();
-      return TRUE;
-      break;
-
     case WM_SIZE:
       OnSize((int) wParam, (int) lParam & 0xFFFF, (int) lParam >> 16);
       return TRUE;
@@ -92,7 +88,7 @@ INT_PTR CDockingWndBase::OnMessage(UINT message, WPARAM wParam, LPARAM lParam)
       }
       else
       {
-        _RPT1(0, "notifyHeader->code %d %x\r\n", (int) notifyHeader->code, notifyHeader->code);
+        //_RPT1(0, "notifyHeader->code %d %x\r\n", (int) notifyHeader->code, notifyHeader->code);
       }
       
       break;
@@ -117,7 +113,8 @@ INT_PTR CDockingWndBase::OnMessage(UINT message, WPARAM wParam, LPARAM lParam)
     }
 
     default:
-      _RPT1(0, "Message %x\r\n", message);
+      //_RPT1(0, "CDockingWndBase::OnMessage Message:%x\r\n", message);
+      break;
   }
 
   return FALSE;
@@ -126,5 +123,44 @@ INT_PTR CDockingWndBase::OnMessage(UINT message, WPARAM wParam, LPARAM lParam)
 void CDockingWndBase::ShowWindow(bool Visible /*= true*/)
 {
   mVisible = Visible;
-  ::SendMessage(mParent, Visible ? NPPM_DMMSHOW : NPPM_DMMHIDE, 0, (LPARAM) mHwnd);
+  ::SendMessage(mNppHandle, Visible ? NPPM_DMMSHOW : NPPM_DMMHIDE, 0, (LPARAM) mHwnd);
+}
+
+BOOL CDockingWndBase::ModifyStyle(DWORD dwRemove, DWORD dwAdd)
+{
+  DWORD dwStyle = (DWORD)::GetWindowLongPtr(mHwnd, GWL_STYLE);
+  DWORD dwNewStyle = (dwStyle & ~dwRemove) | dwAdd;
+  if (dwStyle == dwNewStyle)
+    return FALSE;
+  ::SetWindowLongPtr(mHwnd, GWL_STYLE, dwNewStyle);
+  return TRUE;
+}
+
+BOOL CDockingWndBase::ModifyStyleEx(DWORD dwRemove, DWORD dwAdd)
+{
+  DWORD dwStyle = (DWORD)::GetWindowLongPtr(mHwnd, GWL_EXSTYLE);
+  DWORD dwNewStyle = (dwStyle & ~dwRemove) | dwAdd;
+  if (dwStyle == dwNewStyle)
+    return FALSE;
+  ::SetWindowLongPtr(mHwnd, GWL_EXSTYLE, dwNewStyle);
+  return TRUE;
+}
+
+void CDockingWndBase::SetCheck(int32_t nIDDlgItem, int32_t value)
+{
+  HWND hWnd = GetDlgItem(mHwnd, nIDDlgItem);
+  if (hWnd == 0)
+    return;
+
+  ::SendMessage(hWnd, BM_SETCHECK, value, 0);
+}
+
+bool CDockingWndBase::GetCheck(int32_t nIDDlgItem)
+{
+  HWND hWnd = GetDlgItem(mHwnd, nIDDlgItem);
+  if (hWnd == 0)
+    return false;
+
+  int32_t value = ::SendMessage(hWnd, BM_GETCHECK, 0, 0);
+  return value == BST_CHECKED;
 }

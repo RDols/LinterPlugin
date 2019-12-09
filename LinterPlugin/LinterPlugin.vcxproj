@@ -335,6 +335,7 @@
   <ItemGroup>
     <ClInclude Include="..\PluginCommon\DockingWndBase.h" />
     <ClInclude Include="..\PluginCommon\DockingWndIface.h" />
+    <ClInclude Include="..\PluginCommon\ModalWndBase.h" />
     <ClInclude Include="..\PluginCommon\NppDll.h" />
     <ClInclude Include="..\PluginCommon\NppDllData.h" />
     <ClInclude Include="..\PluginCommon\NppPluginBase.h" />
@@ -342,12 +343,14 @@
     <ClInclude Include="DocWalker.h" />
     <ClInclude Include="FunctionListCtrl.h" />
     <ClInclude Include="ImageButton.h" />
+    <ClInclude Include="LinterConfigDlg.h" />
     <ClInclude Include="LinterData.h" />
     <ClInclude Include="LinterPlugin.h" />
     <ClInclude Include="ListCtrl.h" />
     <ClInclude Include="LinterManager.h" />
     <ClInclude Include="LuaCheckPlainDecoder.h" />
     <ClInclude Include="LuaMarkers.h" />
+    <ClInclude Include="RadioGroup.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ResultListDlg.h" />
     <ClInclude Include="stdafx.h" />
@@ -358,17 +361,20 @@
   <ItemGroup>
     <ClCompile Include="..\PluginCommon\DockingWndBase.cpp" />
     <ClCompile Include="..\PluginCommon\DockingWndIface.cpp" />
+    <ClCompile Include="..\PluginCommon\ModalWndBase.cpp" />
     <ClCompile Include="..\PluginCommon\NppDll.cpp" />
     <ClCompile Include="..\PluginCommon\NppPluginBase.cpp" />
     <ClCompile Include="DecoderBase.cpp" />
     <ClCompile Include="DocWalker.cpp" />
     <ClCompile Include="FunctionListCtrl.cpp" />
     <ClCompile Include="ImageButton.cpp" />
+    <ClCompile Include="LinterConfigDlg.cpp" />
     <ClCompile Include="LinterPlugin.cpp" />
     <ClCompile Include="ListCtrl.cpp" />
     <ClCompile Include="LinterManager.cpp" />
     <ClCompile Include="LuaCheckPlainDecoder.cpp" />
     <ClCompile Include="LuaMarkers.cpp" />
+    <ClCompile Include="RadioGroup.cpp" />
     <ClCompile Include="ResultListDlg.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Unicode_Release|x64'">Create</PrecompiledHeader>

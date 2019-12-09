@@ -4,6 +4,7 @@
 #include "LinterManager.h"
 #include "ResultListDlg.h"
 #include "FunctionListCtrl.h"
+#include "LinterConfigDlg.h"
 
 #include "LinterData.h"
 
@@ -23,7 +24,6 @@ public: //Interface
   void OnDocumentSmallChange(int Delay, bool ForceChanged);
   void FixEasyPeasy();
   void FormatDocument();
-  static int utfOffset(const std::string utf8, int64_t unicodeOffset);
 
 public: //INppDll overrides
   virtual void PluginInit(HMODULE Module);
@@ -38,6 +38,8 @@ public: //Menu Command
   void OnMenuShowResultListDlg();
   static void OnMenuShowFunctionListDlgStatic() { Plugin->OnMenuShowFunctionListDlg(); };
   void OnMenuShowFunctionListDlg();
+  static void OnMenuShowConfigutationDlgStatic() { Plugin->OnMenuShowConfigurationDlg(); };
+  void OnMenuShowConfigurationDlg();
 
 protected: //Help functions
   void ClearErrors();
@@ -45,9 +47,11 @@ protected: //Help functions
 
 protected: //CNppPluginBase Overrides
   void OnMarginClick(int Modifiers, int64_t Position, int MarginId) override;
+  void OnDoubleClick(int64_t Position, int64_t line) override;
   void OnDwellStart(int64_t Position, int x, int y) override;
   void OnDwellEnd(int64_t Position, int x, int y) override;
   void OnShutDown() override;
+  
 
 protected: //Variables
   bool mInShowErrors = false;
@@ -59,4 +63,5 @@ protected: //Variables
   CLinterManager mLintTester;
   CResultListDlg mResultListDlg;
   CFunctionListCtrl mFunctionListCtrl;
+  CLinterConfigDlg mConfigDlg;
 };

@@ -158,7 +158,15 @@ void CFunctionListCtrl::SetErrors(const std::vector<SLintError>& Errors)
     }
   }
 
-  HTREEITEM root = mTreeCtrl.InsertItem("Lua Doc", TVI_ROOT, TreeIcons::Lua);
+  TCHAR filenamebuffer[MAX_PATH];
+  
+  std::string filename = "Lua Doc";
+  if (mParent->SendApp(NPPM_GETFILENAME, MAX_PATH, (LPARAM)filenamebuffer))
+  {
+    std::wstring ws = filenamebuffer;
+    filename = std::string(ws.begin(), ws.end());
+  }
+  HTREEITEM root = mTreeCtrl.InsertItem(filename.c_str(), TVI_ROOT, TreeIcons::Lua);
   mFunctionRoot.ExtractNamespaces();
   mFunctionRoot.SetTree(mTreeCtrl, root);
 }
@@ -166,8 +174,24 @@ void CFunctionListCtrl::SetErrors(const std::vector<SLintError>& Errors)
 void CFunctionListCtrl::Create()
 {
   mNppDialogData.uMask = DWS_ICONTAB;
-  mNppDialogData.hIconTab = (HICON)::LoadImage(mNPP, MAKEINTRESOURCE(IDI_TAB_FUNCTIONLIST), IMAGE_ICON, 16, 16, LR_LOADMAP3DCOLORS | LR_LOADTRANSPARENT);
-  
+  mNppDialogData.hIconTab = (HICON)::LoadImage(mDllHandle, MAKEINTRESOURCE(IDI_TAB_FUNCTIONLIST), IMAGE_ICON, 16, 16, LR_LOADMAP3DCOLORS | LR_LOADTRANSPARENT);
+
+  /*
+  nlohmann::json sub;
+  sub = mParent->mConfig["FunctionList"];
+  if (sub["Startup Position"].is_string())
+  {
+    std::string value = sub["Startup Position"];
+    if (value == "Top")
+      mNppDialogData.uMask |= CONT_TOP;
+    if (value == "Left")
+      mNppDialogData.uMask |= CONT_LEFT;
+    if (value == "Bottom")
+      mNppDialogData.uMask |= CONT_BOTTOM;
+    if (value == "Right")
+      mNppDialogData.uMask |= CONT_RIGHT;
+  }
+*/
   __super::Create();
 
   mTreeCtrl.m_hWnd = GetDlgItem(mHwnd, IDC_TREE_FUNCTIONS);
@@ -187,19 +211,19 @@ void CFunctionListCtrl::CreateImageList()
   COLORREF maskColour = RGB(192, 192, 192);
   HBITMAP hbmp;  
 
-  hbmp = ::LoadBitmap(mNPP, MAKEINTRESOURCE(IDB_BITMAP_LUA_32));
+  hbmp = ::LoadBitmap(mDllHandle, MAKEINTRESOURCE(IDB_BITMAP_LUA_32));
   ImageList_AddMasked(mTreeImageList, hbmp, maskColour);
   DeleteObject(hbmp);
 
-  hbmp = ::LoadBitmap(mNPP, MAKEINTRESOURCE(IDB_BITMAP_NODE));
+  hbmp = ::LoadBitmap(mDllHandle, MAKEINTRESOURCE(IDB_BITMAP_NODE));
   ImageList_AddMasked(mTreeImageList, hbmp, maskColour);
   DeleteObject(hbmp);
 
-  hbmp = ::LoadBitmap(mNPP, MAKEINTRESOURCE(IDB_BITMAP_LEAF));
+  hbmp = ::LoadBitmap(mDllHandle, MAKEINTRESOURCE(IDB_BITMAP_LEAF));
   ImageList_AddMasked(mTreeImageList, hbmp, maskColour);
   DeleteObject(hbmp);
 
-  hbmp = ::LoadBitmap(mNPP, MAKEINTRESOURCE(IDB_BITMAP_LEAF_BLUE));
+  hbmp = ::LoadBitmap(mDllHandle, MAKEINTRESOURCE(IDB_BITMAP_LEAF_BLUE));
   ImageList_AddMasked(mTreeImageList, hbmp, maskColour);
   DeleteObject(hbmp);
 
@@ -220,15 +244,8 @@ void CFunctionListCtrl::OnControlSelectionChangedA(NMTREEVIEWA* TreeItemActive)
   const CTreeItem& childsearch = mFunctionRoot.FindTreeData(TreeItemActive->itemNew.hItem);
   if (childsearch.mTreeItem == TreeItemActive->itemNew.hItem)
   {
-    int32_t beginLine = (int32_t) childsearch.mLintItem.m_line_begin - 1;
-    int32_t beginCol = (int32_t) childsearch.mLintItem.m_column_begin - 1;
-    int64_t begin = mParent->GetPositionForLine(beginLine);
-    begin += mParent->utfOffset(mParent->GetLineText(beginLine), beginCol);
-
-    int32_t endLine = (int32_t) childsearch.mLintItem.m_line_end - 1;
-    int32_t endCol = (int32_t) childsearch.mLintItem.m_column_end - 1;
-    int64_t end = mParent->GetPositionForLine(endLine);
-    end += mParent->utfOffset(mParent->GetLineText(endLine), endCol);
+    int64_t begin = mParent->GetPositionFromXY(childsearch.mLintItem.m_line_begin, childsearch.mLintItem.m_column_begin);
+    int64_t end = mParent->GetPositionFromXY(childsearch.mLintItem.m_line_end, childsearch.mLintItem.m_column_end);
 
     mParent->SendEditor(SCI_SETSEL, begin, end);
     mParent->SetFocusToEditor();

@@ -80,7 +80,7 @@ std::string CNppPluginBase::GetDocumentText()
   return text;
 }
 
-std::string CNppPluginBase::GetLineText(int line)
+std::string CNppPluginBase::GetLineText(int64_t line)
 {
   LRESULT length = SendEditor(SCI_LINELENGTH, line);
 
@@ -92,9 +92,77 @@ std::string CNppPluginBase::GetLineText(int line)
   return text;
 }
 
-LRESULT CNppPluginBase::GetPositionForLine(int line)
+//line and col are ONE based
+void CNppPluginBase::SelectText(int64_t startLine, int64_t startCol, int64_t endLine, int64_t endCol)
+{
+  int64_t begin = GetPositionFromXY(startLine, startCol);
+  int64_t end = GetPositionFromXY(endLine, endCol);
+  SendEditor(SCI_SETSEL, begin, end);
+  SetFocusToEditor();
+}
+LRESULT CNppPluginBase::GetPositionForLine(int64_t line)
 {
   return SendEditor(SCI_POSITIONFROMLINE, line);
+}
+
+//line and col are ONE based
+int64_t CNppPluginBase::GetPositionFromXY(int64_t line, int64_t col)
+{
+  int64_t pos = GetPositionForLine(line-1);
+  pos += utfOffset(GetLineText(line-1), col-1);
+  return pos;
+}
+
+bool CNppPluginBase::GetXYFromPosition(int64_t pos, int64_t& line, int64_t& col)
+{
+  line = SendEditor(SCI_LINEFROMPOSITION, pos);
+  col = OffsetPosition(GetLineText(line), pos - GetPositionForLine(line));
+  return pos;
+}
+
+//From position to column
+int64_t CNppPluginBase::OffsetPosition(const std::string utf8, int64_t utf8col)
+{
+  int64_t result = 0;
+  std::string::const_iterator i = utf8.begin(), end = utf8.end();
+  while (utf8col > 0 && i != end)
+  {
+    if ((*i & 0x80) == 0 || (*i & 0xC0) == 0x80)
+    {
+      ++result;
+    }
+    if (*i != 0x0D && *i != 0x0A)
+    {
+      --utf8col;
+    }
+    ++i;
+  }
+  return result;
+}
+
+//From column to position
+int64_t CNppPluginBase::utfOffset(const std::string utf8, int64_t unicodeOffset)
+{
+  int64_t result = 0;
+  std::string::const_iterator i = utf8.begin(), end = utf8.end();
+  while (unicodeOffset > 0 && i != end)
+  {
+    if ((*i & 0xC0) == 0xC0 && unicodeOffset == 1)
+    {
+      break;
+    }
+    if ((*i & 0x80) == 0 || (*i & 0xC0) == 0x80)
+    {
+      --unicodeOffset;
+    }
+    if (*i != 0x0D && *i != 0x0A)
+    {
+      ++result;
+    }
+    ++i;
+  }
+
+  return result;
 }
 
 std::wstring CNppPluginBase::GetFilePart(unsigned int part)
@@ -197,6 +265,9 @@ void CNppPluginBase::beNotified(SCNotification* Notification)
       break;
     case SCN_MARGINCLICK:
       OnMarginClick(Notification->modifiers, Notification->position, Notification->margin);
+      break;
+    case SCN_DOUBLECLICK:
+      OnDoubleClick(Notification->position, Notification->line);
       break;
     case SCN_DWELLSTART:
       OnDwellStart(Notification->position, Notification->x, Notification->y);

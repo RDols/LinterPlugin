@@ -6,9 +6,10 @@
 #define IDB_BITMAP1                     104
 #define IDB_BITMAP_LUALINT              104
 #define IDD_PROPPAGE_LARGE              107
-#define IDD_LINTER_RESULT_DIALOG        107
+#define IDD_LINTER_CONFIG_DIALOG        107
 #define IDB_WARNING_ENABLED             108
 #define IDD_LINTER_FUNCTION_CTRL        108
+#define IDD_LINTER_RESULT_DIALOG        109
 #define IDB_WARNING_DISABLED            112
 #define IDB_ERROR_ENABLED               113
 #define IDB_ERROR_ENABLEDNOT            114
@@ -39,12 +40,23 @@
 #define IDC_ERROR_BITMAP                1012
 #define IDC_TREE_FUNCTIONS              1012
 #define IDC_FORMAT_BITMAP               1013
+#define IDC_RADIO_RESULT_STARTUP_LAST   1013
 #define IDC_IGNORED_BITMAP              1014
+#define IDC_RADIO_RESULT_STARTUP_HIDDEN 1014
 #define IDC_BUTTON_FORMAT               1015
+#define IDC_RADIO_RESULT_STARTUP_BOTTOM 1015
 #define IDC_IGNORED_BITMAP2             1016
 #define IDC_DEBUG_BITMAP                1016
+#define IDC_RADIO_RESULT_STARTUP_FLOAT_CENTER 1016
 #define IDC_BUTTON5                     1017
+#define IDC_RADIO_FUNCTION_STARTUP_HIDDEN 1017
 #define IDC_BUTTON_REFRESH              1018
+#define IDC_RADIO_FUNCTION_STARTUP_LAST 1018
+#define IDC_RADIO_FUNCTION_STARTUP_FLOAT_CENTER 1019
+#define IDC_RADIO_FUNCTION_STARTUP_BOTTOM 1020
+#define IDC_CHECK_EDITOR_FUNCTION_SEPERATOR 1021
+#define IDC_CHECK_EDITOR_ERROR_EXCLAMATION 1022
+#define IDC_BUTTON_SAVE                 1023
 
 // Next default values for new objects
 // 
@@ -52,7 +64,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        136
 #define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1013
+#define _APS_NEXT_CONTROL_VALUE         1024
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

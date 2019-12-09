@@ -21,10 +21,12 @@ INppDll* nppDll = Plugin;
 #define PLUGIN_MENU_CHECK_DOCUMENT      3
 #define PLUGIN_MENU_SHOW_RESULT_LIST    4
 #define PLUGIN_MENU_SHOW_FUNCTION_LIST  5
+#define PLUGIN_MENU_SHOW_CONFIG         6
 
 CLinterPlugin::CLinterPlugin()
   : mResultListDlg(this)
   , mFunctionListCtrl(this)
+  , mConfigDlg(this)
 {
   mPluginName = L"Linter Plugin";
   mPluginShortName = "LinterPlugin";
@@ -33,6 +35,7 @@ CLinterPlugin::CLinterPlugin()
   AddMenuItem(PLUGIN_MENU_CHECK_DOCUMENT, _T("Check Document"), CLinterPlugin::OnMenuCheckDocumentStatic, NULL, false, 0);
   AddMenuItem(PLUGIN_MENU_SHOW_RESULT_LIST, _T("Show Error List"), CLinterPlugin::OnMenuShowResultListDlgStatic, NULL, false, IDB_BITMAP_LUALINT);
   AddMenuItem(PLUGIN_MENU_SHOW_FUNCTION_LIST, _T("Show Function List"), CLinterPlugin::OnMenuShowFunctionListDlgStatic, NULL, false, IDB_BITMAP_LUA_LIST);
+  AddMenuItem(PLUGIN_MENU_SHOW_CONFIG, _T("Configuration..."), CLinterPlugin::OnMenuShowConfigutationDlgStatic, NULL, false, 0);
 
   
   mMarginId = 1;
@@ -71,13 +74,12 @@ void CLinterPlugin::beNotified(SCNotification* Notification)
     if (Notification->modificationType & (SC_MOD_INSERTTEXT | SC_MOD_DELETETEXT))
       OnDocumentSmallChange(1, false);
     break;
-  case SCN_UPDATEUI:
-    break;
   case LINTER_MSG_NEW_DATA:
     if (ShowErrors(false))
       ShowErrors(false);
     break;
   default:
+    //_RPT1(0, "CLinterPlugin::beNotified code:%d\r\n", Notification->nmhdr.code);
     break;
   }
 }
@@ -117,10 +119,33 @@ void CLinterPlugin::EnablePlugin()
     mLintTester.StopErrorChecking();
   }
 
-  if (mConfig["LinterListVisible"])
+  nlohmann::json sub;
+  bool makeVisible;
+
+  sub = mConfig["ResultWnd"];
+  makeVisible = true;
+  if (sub["Startup Position"].is_string())
+  {
+    std::string value = sub["Startup Position"];
+    if (value == "Hidden")
+      makeVisible = false;
+    if (value == "Last" && sub["LastTimeVisible"].is_boolean() && !sub["LastTimeVisible"])
+      makeVisible = false;
+  }
+  if (makeVisible)
     OnMenuShowResultListDlg();
   
-  if (mConfig["FunctionListVisible"])
+  sub = mConfig["FunctionList"];
+  makeVisible = true;
+  if (sub["Startup Position"].is_string())
+  {
+    std::string value = sub["Startup Position"];
+    if (value == "Hidden")
+      makeVisible = false;
+    if (value == "Last" && sub["LastTimeVisible"].is_boolean() && !sub["LastTimeVisible"])
+      makeVisible = false;
+  }
+  if (makeVisible)
     OnMenuShowFunctionListDlg();
 
   SendApp(NPPM_SETMENUITEMCHECK, GetNppMenuId(PLUGIN_MENU_ENABLE), mPluginEnabled ? TRUE : FALSE);
@@ -171,6 +196,27 @@ void CLinterPlugin::OnMenuShowFunctionListDlg()
     SendApp(NPPM_SETMENUITEMCHECK, GetNppMenuId(PLUGIN_MENU_SHOW_FUNCTION_LIST), TRUE);
   }
 }
+
+void CLinterPlugin::OnMenuShowConfigurationDlg()
+{
+  if (!mConfigDlg.isCreated())
+  {
+    mConfigDlg.Init((HINSTANCE)mDllHandle, mNppData.NppHandle);
+    mConfigDlg.DoModal();
+    //mConfigDlg.Redraw();
+  }
+  //if (mConfigDlg.isVisible())
+  //{
+    //mConfigDlg.ShowWindow(false);
+    //SendApp(NPPM_SETMENUITEMCHECK, GetNppMenuId(PLUGIN_MENU_SHOW_FUNCTION_LIST), FALSE);
+  //}
+  //else
+  //{
+    //mConfigDlg.ShowWindow(true);
+    //SendApp(NPPM_SETMENUITEMCHECK, GetNppMenuId(PLUGIN_MENU_SHOW_FUNCTION_LIST), TRUE);
+  //}
+}
+
 void CLinterPlugin::OnDocumentBigChange()
 {
   LangType curLangType;
@@ -268,9 +314,12 @@ bool CLinterPlugin::ShowErrors(bool Force)
   SendEditor(SCI_INDICSETFORE, INDICATOR_STYLE_ID_WARNING, 0x0000ff);
   SendEditor(SCI_SETINDICATORCURRENT, INDICATOR_STYLE_ID_WARNING);
 
+  bool showMarkers = !!mConfig["Editor"]["Error Exclamation"];
+
   for (auto viewError : viewList)
   {
-    SendEditor(SCI_MARKERADD, mErrors[viewError].m_line_begin - 1, mMarkerIdError);
+    if (showMarkers)
+      SendEditor(SCI_MARKERADD, mErrors[viewError].m_line_begin - 1, mMarkerIdError);
     mErrors[viewError].m_position_begin = GetPositionForLine((int32_t) mErrors[viewError].m_line_begin - 1);
     mErrors[viewError].m_position_begin += utfOffset(GetLineText((int32_t)mErrors[viewError].m_line_begin - 1), mErrors[viewError].m_column_begin - 1);
     mErrors[viewError].m_position_end = GetPositionForLine((int32_t) mErrors[viewError].m_line_end - 1);
@@ -279,8 +328,9 @@ bool CLinterPlugin::ShowErrors(bool Force)
   }
 
   SendEditor(SCI_SETINDICATORCURRENT, oldid);
-
+  
   ShowFunctionMarkers(false);
+
   mInShowErrors = false;
   return true;
 }
@@ -288,6 +338,8 @@ bool CLinterPlugin::ShowErrors(bool Force)
 void CLinterPlugin::ShowFunctionMarkers(bool /*Force*/)
 {
 	ClearFunctionMarkers();
+  if (!mConfig["Editor"]["Function Sepeator"])
+    return;
 	//SendEditor(SCI_MARKERADD, 5, mMarkerIdFunction);
   for (auto& it : mErrors)
   {
@@ -297,31 +349,6 @@ void CLinterPlugin::ShowFunctionMarkers(bool /*Force*/)
     }
   }
 }
-
-int CLinterPlugin::utfOffset(const std::string utf8, int64_t unicodeOffset)
-{
-  int result = 0;
-  std::string::const_iterator i = utf8.begin(), end = utf8.end();
-  while (unicodeOffset > 0 && i != end)
-  {
-    if ((*i & 0xC0) == 0xC0 && unicodeOffset == 1)
-    {
-      break;
-    }
-    if ((*i & 0x80) == 0 || (*i & 0xC0) == 0x80)
-    {
-      --unicodeOffset;
-    }
-    if (*i != 0x0D && *i != 0x0A)
-    {
-      ++result;
-    }
-    ++i;
-  }
-
-  return result;
-}
-
 
 void CLinterPlugin::OnMarginClick(int /*Modifiers*/, int64_t Position, int MarginId)
 {
@@ -337,6 +364,50 @@ void CLinterPlugin::OnMarginClick(int /*Modifiers*/, int64_t Position, int Margi
     ::SendMessage(hScintilla, SCI_MARKERADD, LineNr, mMarkerIdError);
 }
 
+void CLinterPlugin::OnDoubleClick(int64_t Position, int64_t line)
+{
+  int64_t col = 0;
+  GetXYFromPosition(Position, line, col);
+  line++;
+  col++;
+  for (auto it : mErrors)
+  {
+    if (it.m_line_begin == line)
+    {
+      int64_t size = 0;
+      if (it.m_severity == MRK_FUNCTION_LOCAL || it.m_severity == MRK_FUNCTION_GLOBAL)
+        size = 8; //function tag
+      else if (it.m_severity == MRK_IF)
+        size = 2; //if tag
+      else if (it.m_severity == MRK_FOR)
+        size = 2; //for tag
+      else if (it.m_severity == MRK_REPEAT || it.m_severity == MRK_WHILE)
+        size = 5; //repeat tag
+
+      if (col > it.m_column_begin && col <= it.m_column_begin + size)
+      {
+        SelectText(it.m_line_begin, it.m_column_begin, it.m_line_end, it.m_column_end);
+        return;
+      }
+
+    }
+    if (it.m_line_end == line)
+    {
+      int64_t size = 0;
+      if (it.m_severity == MRK_FUNCTION_LOCAL || it.m_severity == MRK_FUNCTION_GLOBAL || MRK_IF || MRK_FOR || MRK_WHILE)
+        size = 3; //end tag
+      else if (it.m_severity == MRK_REPEAT)
+        size = 5; //until tag
+
+      if (col >= it.m_column_end - size && col < it.m_column_end)
+      {
+        SelectText(it.m_line_begin, it.m_column_begin, it.m_line_end, it.m_column_end);
+        return;
+      }
+    }
+  }
+}
+
 void CLinterPlugin::OnDwellStart(int64_t Position, int /*x*/, int /*y*/)
 {
   if (Position < 0) return;
@@ -344,7 +415,7 @@ void CLinterPlugin::OnDwellStart(int64_t Position, int /*x*/, int /*y*/)
   HWND hScintilla = GetScintillaHandle();
   for (std::vector<SLintError>::iterator it = mErrors.begin(); it != mErrors.end(); it++)
   {
-    if (Position >= it->m_position_begin && Position <= it->m_position_end)
+    if (Position >= it->m_line_begin && Position <= it->m_position_end)
     {
       ::SendMessage(hScintilla, SCI_CALLTIPSHOW, Position, (LPARAM) it->m_message.c_str());
       break;
@@ -362,7 +433,15 @@ void CLinterPlugin::OnDwellEnd(int64_t /*Position*/, int /*x*/, int /*y*/)
 
 void CLinterPlugin::OnShutDown()
 {
-  mConfig["LinterListVisible"] = mResultListDlg.isVisible();
-  mConfig["FunctionListVisible"] = mFunctionListCtrl.isVisible();
+  nlohmann::json sub;
+
+  sub = mConfig["ResultWnd"];
+  sub["LastTimeVisible"] = mResultListDlg.isVisible();
+  mConfig["ResultWnd"] = sub;
+
+  sub = mConfig["FunctionList"];
+  sub["LastTimeVisible"] = mFunctionListCtrl.isVisible();
+  mConfig["FunctionList"] = sub;
+
   WritePluginConfigFile();
 }

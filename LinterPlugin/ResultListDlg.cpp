@@ -44,11 +44,11 @@ void CResultListDlg::Create()
 {
   __super::Create();
 
-  mErrorButton.Create(mNPP, mHwnd);
-  mWarningButton.Create(mNPP, mHwnd);
-  mFormatButton.Create(mNPP, mHwnd);
-  mIgnoreButton.Create(mNPP, mHwnd);
-  mDebugButton.Create(mNPP, mHwnd);
+  mErrorButton.Create(mDllHandle, mHwnd);
+  mWarningButton.Create(mDllHandle, mHwnd);
+  mFormatButton.Create(mDllHandle, mHwnd);
+  mIgnoreButton.Create(mDllHandle, mHwnd);
+  mDebugButton.Create(mDllHandle, mHwnd);
 
   mButtonFixEasyPeasy = GetDlgItem(mHwnd, IDC_BUTTON_EASYPEASY);
   mButtonFormatDocument = GetDlgItem(mHwnd, IDC_BUTTON_FORMAT);

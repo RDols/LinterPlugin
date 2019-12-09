@@ -48,7 +48,7 @@ void CAutoCompletionPlugin::beNotified(SCNotification* Notification)
   default:
     break;
   }
-  _RPT1(0, "CAutoCompletionPlugin::beNotified code:%d\r\n", Notification->nmhdr.code);
+  //_RPT1(0, "CAutoCompletionPlugin::beNotified code:%d\r\n", Notification->nmhdr.code);
 }
 
 void CAutoCompletionPlugin::EnablePlugin()

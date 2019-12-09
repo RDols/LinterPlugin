@@ -20,8 +20,13 @@ public:
   void SetFocusToEditor();
 
 public:
-  std::string GetLineText(int line);
-  LRESULT GetPositionForLine(int line);
+  std::string GetLineText(int64_t line);
+  void SelectText(int64_t startLine, int64_t startCol, int64_t endLine, int64_t endCol);
+  LRESULT GetPositionForLine(int64_t line);
+  int64_t GetPositionFromXY(int64_t line, int64_t pos);
+  bool GetXYFromPosition(int64_t pos, int64_t& line, int64_t& col);
+  int64_t OffsetPosition(const std::string utf8, int64_t col);
+  int64_t utfOffset(const std::string utf8, int64_t unicodeOffset);
 
 protected: //Help functions
   bool AddMenuItem(int CmdID, const TCHAR *cmdName, PFUNCPLUGINCMD pFunc, SShortcutKey *sk, bool checkOnInit, int ResourceId);
@@ -38,6 +43,7 @@ public: // Help functions
 
 protected: //Virtuals
   virtual void OnMarginClick(int /*Modifiers*/, int64_t /*Position*/, int /*MarginId*/) {};
+  virtual void OnDoubleClick(int64_t /*Position*/, int64_t /*line*/) {};
   virtual void OnDwellStart(int64_t /*Position*/, int /*x*/, int /*y*/) {};
   virtual void OnDwellEnd(int64_t /*Position*/, int /*x*/, int /*y*/) {};
   virtual void OnShutDown() {};

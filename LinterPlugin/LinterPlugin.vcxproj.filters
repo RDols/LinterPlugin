@@ -95,6 +95,15 @@
     <ClInclude Include="TreeCtrl.h">
       <Filter>Source Files\30 Windows\39 DockingWnd</Filter>
     </ClInclude>
+    <ClInclude Include="LinterConfigDlg.h">
+      <Filter>Source Files\30 Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\PluginCommon\ModalWndBase.h">
+      <Filter>Source Files\60 PluginCommon</Filter>
+    </ClInclude>
+    <ClInclude Include="RadioGroup.h">
+      <Filter>Source Files\30 Windows\39 DockingWnd</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\PluginCommon\DockingWndBase.cpp">
@@ -143,6 +152,15 @@
       <Filter>Source Files\30 Windows</Filter>
     </ClCompile>
     <ClCompile Include="TreeCtrl.cpp">
+      <Filter>Source Files\30 Windows\39 DockingWnd</Filter>
+    </ClCompile>
+    <ClCompile Include="LinterConfigDlg.cpp">
+      <Filter>Source Files\30 Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PluginCommon\ModalWndBase.cpp">
+      <Filter>Source Files\60 PluginCommon</Filter>
+    </ClCompile>
+    <ClCompile Include="RadioGroup.cpp">
       <Filter>Source Files\30 Windows\39 DockingWnd</Filter>
     </ClCompile>
   </ItemGroup>
