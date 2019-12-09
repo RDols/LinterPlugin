@@ -96,7 +96,7 @@ void CLuaMarkers::OnStateNormal()
     stateStartPos = doc;
     state = DecodeState::STRING;
   }
-  else if (!doc.Contains(c, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.:"))
+  else if (!doc.Contains(c, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.:_"))
   {
     int64_t wordsize = doc.mPos - wordStart.mPos;
     if (wordsize > 1)
