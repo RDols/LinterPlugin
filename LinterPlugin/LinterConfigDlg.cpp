@@ -20,13 +20,13 @@ CLinterConfigDlg::CLinterConfigDlg(CLinterPlugin* Parent)
   mResultStartup.AddToGroup(IDC_RADIO_RESULT_STARTUP_LAST, "Last");
   mResultStartup.AddToGroup(IDC_RADIO_RESULT_STARTUP_FLOAT_CENTER, "Floating");
   mResultStartup.AddToGroup(IDC_RADIO_RESULT_STARTUP_BOTTOM, "Bottom");
-  mResultStartup.SetDefault("Floating");
+  mResultStartup.SetDefault("Last");
 
   mFunctionStartup.AddToGroup(IDC_RADIO_FUNCTION_STARTUP_HIDDEN, "Hidden");
   mFunctionStartup.AddToGroup(IDC_RADIO_FUNCTION_STARTUP_LAST, "Last");
   mFunctionStartup.AddToGroup(IDC_RADIO_FUNCTION_STARTUP_FLOAT_CENTER, "Floating");
   mFunctionStartup.AddToGroup(IDC_RADIO_FUNCTION_STARTUP_BOTTOM, "Bottom");
-  mFunctionStartup.SetDefault("Floating");
+  mFunctionStartup.SetDefault("Last");
 }
 
 CLinterConfigDlg::~CLinterConfigDlg()

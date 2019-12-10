@@ -306,7 +306,12 @@ bool CLinterPlugin::ShowErrors(bool Force)
   SendEditor(SCI_INDICSETFORE, INDICATOR_STYLE_ID_WARNING, 0x0000ff);
   SendEditor(SCI_SETINDICATORCURRENT, INDICATOR_STYLE_ID_WARNING);
 
-  bool showMarkers = !!mConfig["Editor"]["Error Exclamation"];
+  
+  bool showMarkers = true;
+  if (mConfig["Editor"]["Error Exclamation"].is_boolean())
+  {
+    showMarkers = !!mConfig["Editor"]["Error Exclamation"];
+  }
 
   for (auto viewError : viewList)
   {
@@ -328,8 +333,11 @@ bool CLinterPlugin::ShowErrors(bool Force)
 void CLinterPlugin::ShowFunctionMarkers(bool /*Force*/)
 {
 	ClearFunctionMarkers();
-  if (!mConfig["Editor"]["Function Sepeator"])
-    return;
+  if (mConfig["Editor"]["Function Sepeator"].is_boolean())
+  {
+    if (!mConfig["Editor"]["Function Sepeator"])
+      return;
+  }
 	//SendEditor(SCI_MARKERADD, 5, mMarkerIdFunction);
   for (auto& it : mErrors)
   {
