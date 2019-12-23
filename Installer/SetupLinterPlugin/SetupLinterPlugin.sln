@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29609.76
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SetupLinterPlugin", "SetupLinterPlugin\SetupLinterPlugin.vdproj", "{9A32FFA6-4D2A-4546-81FC-AEB8D6A74FFD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Default = Debug|Default
+		Release|Default = Release|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9A32FFA6-4D2A-4546-81FC-AEB8D6A74FFD}.Debug|Default.ActiveCfg = Debug
+		{9A32FFA6-4D2A-4546-81FC-AEB8D6A74FFD}.Debug|Default.Build.0 = Debug
+		{9A32FFA6-4D2A-4546-81FC-AEB8D6A74FFD}.Release|Default.ActiveCfg = Release
+		{9A32FFA6-4D2A-4546-81FC-AEB8D6A74FFD}.Release|Default.Build.0 = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A397DAB9-F187-4B30-9AC5-E5441A824413}
+	EndGlobalSection
+EndGlobal
