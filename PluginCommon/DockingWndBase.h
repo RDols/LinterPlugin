@@ -35,12 +35,16 @@ protected: //Messages
   virtual void OnControlClick(int /*ResourceId*/, HWND /*ControlWnd*/) {};
   virtual void OnContextMenu(HWND /*ControlWnd*/, int /*x*/, int /*y*/) {};
   virtual void OnSize(UINT /*nType*/, int /*cx*/, int /*cy*/) {};
+  virtual void OnShowWindow(BOOL /*Visible*/, int /*status*/);
   virtual void OnGetListDisplayInfoA(NMLVDISPINFOA* /*ListDisplayInfo*/) {};
   virtual void OnGetListDisplayInfoW(NMLVDISPINFOW* /*ListDisplayInfo*/) {};
   virtual void OnControlDoubleClick(NMITEMACTIVATE* /*ListItemActive*/) {};
   virtual void OnControlSelectionChangedA(NMTREEVIEWA* /*TreeItemActive*/) {};
 
 protected: //Help functions
+
+public:
+  int64_t mToolbarId = 0;
 
 protected: //Variables
   bool mVisible = false;
@@ -50,5 +54,4 @@ protected: //Variables
   HINSTANCE mDllHandle = 0;
   HWND mNppHandle = 0;
   HWND mHwnd = 0;
-
 };

@@ -47,6 +47,7 @@ public:
 
   CDocPosition FindEOL();
   bool Match(const char* word, CDocPosition& endPosition);
+  bool MatchIgnoreCase(const char* word, CDocPosition& endPosition);
   bool FindWord(const char* word, int64_t LastPos, CDocPosition& startPosition, CDocPosition& endPosition);
   static bool Contains(char c, const char* chars);
 };

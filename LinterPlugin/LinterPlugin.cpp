@@ -87,6 +87,8 @@ void CLinterPlugin::beNotified(SCNotification* Notification)
 void CLinterPlugin::EnablePlugin()
 {
   HWND hScintilla = GetScintillaHandle();
+  mResultListDlg.mToolbarId = GetNppMenuId(PLUGIN_MENU_SHOW_RESULT_LIST);
+  mFunctionListCtrl.mToolbarId = GetNppMenuId(PLUGIN_MENU_SHOW_FUNCTION_LIST);
 
   ::SendMessage(hScintilla, SCI_SETMARGINTYPEN, mMarginId, SC_MARGIN_SYMBOL);
 
@@ -147,8 +149,6 @@ void CLinterPlugin::EnablePlugin()
   }
   if (makeVisible)
     OnMenuShowFunctionListDlg();
-
-  SendApp(NPPM_SETMENUITEMCHECK, GetNppMenuId(PLUGIN_MENU_ENABLE), mPluginEnabled ? TRUE : FALSE);
 }
 
 void CLinterPlugin::OnMenuCheckDocument()
@@ -163,17 +163,17 @@ void CLinterPlugin::OnMenuShowResultListDlg()
     mResultListDlg.Init((HINSTANCE)mDllHandle, mNppData.NppHandle);
     mResultListDlg.Create();
     mResultListDlg.Redraw();
+    mResultListDlg.ShowWindow(true);
+    return;
   }
 
   if (mResultListDlg.isVisible())
   {
     mResultListDlg.ShowWindow(false);
-    SendApp(NPPM_SETMENUITEMCHECK, GetNppMenuId(PLUGIN_MENU_SHOW_RESULT_LIST), FALSE);
   }
   else
   {
     mResultListDlg.ShowWindow(true);
-    SendApp(NPPM_SETMENUITEMCHECK, GetNppMenuId(PLUGIN_MENU_SHOW_RESULT_LIST), TRUE);
   }
 }
 
@@ -184,16 +184,16 @@ void CLinterPlugin::OnMenuShowFunctionListDlg()
     mFunctionListCtrl.Init((HINSTANCE)mDllHandle, mNppData.NppHandle);
     mFunctionListCtrl.Create();
     mFunctionListCtrl.Redraw();
+    mResultListDlg.ShowWindow(true);
+    return;
   }
   if (mFunctionListCtrl.isVisible())
   {
     mFunctionListCtrl.ShowWindow(false);
-    SendApp(NPPM_SETMENUITEMCHECK, GetNppMenuId(PLUGIN_MENU_SHOW_FUNCTION_LIST), FALSE);
   }
   else
   {
     mFunctionListCtrl.ShowWindow(true);
-    SendApp(NPPM_SETMENUITEMCHECK, GetNppMenuId(PLUGIN_MENU_SHOW_FUNCTION_LIST), TRUE);
   }
 }
 
@@ -208,12 +208,10 @@ void CLinterPlugin::OnMenuShowConfigurationDlg()
   //if (mConfigDlg.isVisible())
   //{
     //mConfigDlg.ShowWindow(false);
-    //SendApp(NPPM_SETMENUITEMCHECK, GetNppMenuId(PLUGIN_MENU_SHOW_FUNCTION_LIST), FALSE);
   //}
   //else
   //{
     //mConfigDlg.ShowWindow(true);
-    //SendApp(NPPM_SETMENUITEMCHECK, GetNppMenuId(PLUGIN_MENU_SHOW_FUNCTION_LIST), TRUE);
   //}
 }
 
@@ -343,7 +341,10 @@ void CLinterPlugin::ShowFunctionMarkers(bool /*Force*/)
   {
     if (it.m_severity == MRK_FUNCTION_LOCAL || it.m_severity == MRK_FUNCTION_GLOBAL)
     {
-      SendEditor(SCI_MARKERADD, it.m_line_begin-2, mMarkerIdFunction);
+      if (it.m_line_begin != it.m_line_end)
+      {
+        SendEditor(SCI_MARKERADD, it.m_line_begin - 2, mMarkerIdFunction);
+      }
     }
   }
 }
@@ -366,8 +367,7 @@ void CLinterPlugin::OnDoubleClick(int64_t Position, int64_t line)
 {
   int64_t col = 0;
   GetXYFromPosition(Position, line, col);
-  line++;
-  col++;
+
   for (auto it : mErrors)
   {
     if (it.m_line_begin == line)
@@ -384,7 +384,7 @@ void CLinterPlugin::OnDoubleClick(int64_t Position, int64_t line)
 
       if (col > it.m_column_begin && col <= it.m_column_begin + size)
       {
-        SelectText(it.m_line_begin, it.m_column_begin, it.m_line_end, it.m_column_end);
+        SelectText(it.m_line_begin, it.m_column_begin, it.m_line_end, it.m_column_end, false);
         return;
       }
 
@@ -399,7 +399,7 @@ void CLinterPlugin::OnDoubleClick(int64_t Position, int64_t line)
 
       if (col >= it.m_column_end - size && col < it.m_column_end)
       {
-        SelectText(it.m_line_begin, it.m_column_begin, it.m_line_end, it.m_column_end);
+        SelectText(it.m_line_begin, it.m_column_begin, it.m_line_end, it.m_column_end, false);
         return;
       }
     }

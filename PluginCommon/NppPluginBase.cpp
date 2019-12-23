@@ -82,10 +82,10 @@ std::string CNppPluginBase::GetDocumentText()
 
 std::string CNppPluginBase::GetLineText(int64_t line)
 {
-  LRESULT length = SendEditor(SCI_LINELENGTH, line);
+  LRESULT length = SendEditor(SCI_LINELENGTH, line-1);
 
   char *buff = new char[length + 1];
-  SendEditor(SCI_GETLINE, line, (LPARAM)buff);
+  SendEditor(SCI_GETLINE, line-1, (LPARAM)buff);
   std::string text(buff, length);
   text = text.c_str();
   delete[] buff;
@@ -93,31 +93,39 @@ std::string CNppPluginBase::GetLineText(int64_t line)
 }
 
 //line and col are ONE based
-void CNppPluginBase::SelectText(int64_t startLine, int64_t startCol, int64_t endLine, int64_t endCol)
+void CNppPluginBase::SelectText(int64_t startLine, int64_t startCol, int64_t endLine, int64_t endCol, bool MoveScrollbar)
 {
   int64_t begin = GetPositionFromXY(startLine, startCol);
   int64_t end = GetPositionFromXY(endLine, endCol);
   SendEditor(SCI_SETSEL, begin, end);
+  if (MoveScrollbar)
+  {
+    int64_t linesSelected = endLine - startLine + 1;
+    int64_t linesInView = SendEditor(SCI_LINESONSCREEN);
+    int64_t firstline = max(4, (linesInView - linesSelected) / 2);
+    firstline = startLine - firstline;
+    SendEditor(SCI_SETFIRSTVISIBLELINE, firstline-1);
+  }
   SetFocusToEditor();
 }
 LRESULT CNppPluginBase::GetPositionForLine(int64_t line)
 {
-  return SendEditor(SCI_POSITIONFROMLINE, line);
+  return SendEditor(SCI_POSITIONFROMLINE, line-1);
 }
 
 //line and col are ONE based
 int64_t CNppPluginBase::GetPositionFromXY(int64_t line, int64_t col)
 {
-  int64_t pos = GetPositionForLine(line-1);
-  pos += utfOffset(GetLineText(line-1), col-1);
+  int64_t pos = GetPositionForLine(line);
+  pos += utfOffset(GetLineText(line), col-1);
   return pos;
 }
 
 bool CNppPluginBase::GetXYFromPosition(int64_t pos, int64_t& line, int64_t& col)
 {
-  line = SendEditor(SCI_LINEFROMPOSITION, pos);
-  col = OffsetPosition(GetLineText(line), pos - GetPositionForLine(line));
-  return pos;
+  line = SendEditor(SCI_LINEFROMPOSITION, pos)+1;
+  col = OffsetPosition(GetLineText(line), pos - GetPositionForLine(line))+1;
+  return true;
 }
 
 //From position to column

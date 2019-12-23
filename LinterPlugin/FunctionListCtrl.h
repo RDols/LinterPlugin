@@ -46,5 +46,8 @@ protected:
   CTreeCtrl mTreeCtrl;
   HIMAGELIST mTreeImageList = 0;
   CTreeItem mFunctionRoot;
+  CTreeItem mToDoRoot;
+  CTreeItem mNoteRoot;
+  CTreeItem mBreakRoot;
 };
 

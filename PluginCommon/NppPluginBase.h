@@ -21,7 +21,7 @@ public:
 
 public:
   std::string GetLineText(int64_t line);
-  void SelectText(int64_t startLine, int64_t startCol, int64_t endLine, int64_t endCol);
+  void SelectText(int64_t startLine, int64_t startCol, int64_t endLine, int64_t endCol, bool MoveScrollbar);
   LRESULT GetPositionForLine(int64_t line);
   int64_t GetPositionFromXY(int64_t line, int64_t pos);
   bool GetXYFromPosition(int64_t pos, int64_t& line, int64_t& col);

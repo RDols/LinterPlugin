@@ -62,7 +62,10 @@ INT_PTR CDockingWndBase::OnMessage(UINT message, WPARAM wParam, LPARAM lParam)
       OnSize((int) wParam, (int) lParam & 0xFFFF, (int) lParam >> 16);
       return TRUE;
       break;
-
+    case WM_SHOWWINDOW:
+      OnShowWindow((BOOL) wParam, (int) lParam);
+      return TRUE;
+      break;
     case WM_NOTIFY:
     {
       LPNMHDR notifyHeader = (LPNMHDR)lParam;      
@@ -88,7 +91,7 @@ INT_PTR CDockingWndBase::OnMessage(UINT message, WPARAM wParam, LPARAM lParam)
       }
       else
       {
-        //_RPT1(0, "notifyHeader->code %d %x\r\n", (int) notifyHeader->code, notifyHeader->code);
+        _RPT1(0, "notifyHeader->code %d %x\r\n", (int) notifyHeader->code, notifyHeader->code);
       }
       
       break;
@@ -113,7 +116,7 @@ INT_PTR CDockingWndBase::OnMessage(UINT message, WPARAM wParam, LPARAM lParam)
     }
 
     default:
-      //_RPT1(0, "CDockingWndBase::OnMessage Message:%x\r\n", message);
+      _RPT1(0, "CDockingWndBase::OnMessage Message:%x\r\n", message);
       break;
   }
 
@@ -125,6 +128,13 @@ void CDockingWndBase::ShowWindow(bool Visible /*= true*/)
   mVisible = Visible;
   ::SendMessage(mNppHandle, Visible ? NPPM_DMMSHOW : NPPM_DMMHIDE, 0, (LPARAM) mHwnd);
 }
+
+void CDockingWndBase::OnShowWindow(BOOL Visible, int /*status*/)
+{
+  mVisible = !!Visible;
+  ::SendMessage(mNppHandle, NPPM_SETMENUITEMCHECK, (WPARAM)mToolbarId, (LPARAM) Visible);
+}
+
 
 BOOL CDockingWndBase::ModifyStyle(DWORD dwRemove, DWORD dwAdd)
 {

@@ -8,6 +8,7 @@ enum class DecodeState
   NORMAL = 0,
   STRING,
   STRING_BLOCK,
+  COMMENT,
   COMMENT_BLOCK
 };
 
@@ -24,6 +25,7 @@ protected: // Virtuals override from CDecoderBase
 private:
   void Reset(char* srcDoc, int srcDocLength);
   void OnStateNormal();
+  void OnStateComment();
   void OnStateCommentBlock();
   void OnStateStringBlock();
   void OnStateString();

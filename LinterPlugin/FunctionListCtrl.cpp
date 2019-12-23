@@ -146,6 +146,9 @@ void CFunctionListCtrl::SetErrors(const std::vector<SLintError>& Errors)
 {
   mTreeCtrl.DeleteAllItems();
   mFunctionRoot.mChildren.clear();
+  mToDoRoot.mChildren.clear();
+  mNoteRoot.mChildren.clear();
+  mBreakRoot.mChildren.clear();
 
   for (auto it : Errors)
   {
@@ -155,6 +158,27 @@ void CFunctionListCtrl::SetErrors(const std::vector<SLintError>& Errors)
       newItem.mLintItem = it;
       newItem.mDisplayName = it.m_subject;
       mFunctionRoot.AddItem(newItem);
+    }
+    if (it.m_severity == MRK_BREAK)
+    {
+      CTreeItem newItem;
+      newItem.mLintItem = it;
+      newItem.mDisplayName = it.m_subject;
+      mBreakRoot.AddItem(newItem);
+    }
+    if (it.m_severity == MRK_TODO)
+    {
+      CTreeItem newItem;
+      newItem.mLintItem = it;
+      newItem.mDisplayName = it.m_subject;
+      mToDoRoot.AddItem(newItem);
+    }
+    if (it.m_severity == MRK_NOTE)
+    {
+      CTreeItem newItem;
+      newItem.mLintItem = it;
+      newItem.mDisplayName = it.m_subject;
+      mNoteRoot.AddItem(newItem);
     }
   }
 
@@ -169,6 +193,15 @@ void CFunctionListCtrl::SetErrors(const std::vector<SLintError>& Errors)
   HTREEITEM root = mTreeCtrl.InsertItem(filename.c_str(), TVI_ROOT, TreeIcons::Lua);
   mFunctionRoot.ExtractNamespaces();
   mFunctionRoot.SetTree(mTreeCtrl, root);
+
+  root = mTreeCtrl.InsertItem("ToDo", TVI_ROOT, TreeIcons::Lua);
+  mToDoRoot.SetTree(mTreeCtrl, root);
+
+  root = mTreeCtrl.InsertItem("Notes", TVI_ROOT, TreeIcons::Lua);
+  mNoteRoot.SetTree(mTreeCtrl, root);
+
+  root = mTreeCtrl.InsertItem("Break", TVI_ROOT, TreeIcons::Lua);
+  mBreakRoot.SetTree(mTreeCtrl, root);
 }
 
 void CFunctionListCtrl::Create()
@@ -241,13 +274,36 @@ void CFunctionListCtrl::OnSize(UINT /*nType*/, int cx, int cy)
 
 void CFunctionListCtrl::OnControlSelectionChangedA(NMTREEVIEWA* TreeItemActive)
 {
-  const CTreeItem& childsearch = mFunctionRoot.FindTreeData(TreeItemActive->itemNew.hItem);
-  if (childsearch.mTreeItem == TreeItemActive->itemNew.hItem)
   {
-    int64_t begin = mParent->GetPositionFromXY(childsearch.mLintItem.m_line_begin, childsearch.mLintItem.m_column_begin);
-    int64_t end = mParent->GetPositionFromXY(childsearch.mLintItem.m_line_end, childsearch.mLintItem.m_column_end);
-
-    mParent->SendEditor(SCI_SETSEL, begin, end);
-    mParent->SetFocusToEditor();
+    const CTreeItem& childsearch = mFunctionRoot.FindTreeData(TreeItemActive->itemNew.hItem);
+    if (childsearch.mTreeItem == TreeItemActive->itemNew.hItem)
+    {
+      mParent->SelectText(childsearch.mLintItem.m_line_begin, childsearch.mLintItem.m_column_begin, childsearch.mLintItem.m_line_end, childsearch.mLintItem.m_column_end, true);
+      return;
+    }
+  }
+  {
+    const CTreeItem& childsearch = mToDoRoot.FindTreeData(TreeItemActive->itemNew.hItem);
+    if (childsearch.mTreeItem == TreeItemActive->itemNew.hItem)
+    {
+      mParent->SelectText(childsearch.mLintItem.m_line_begin, childsearch.mLintItem.m_column_begin, childsearch.mLintItem.m_line_end, childsearch.mLintItem.m_column_end, true);
+      return;
+    }
+  }
+  {
+    const CTreeItem& childsearch = mNoteRoot.FindTreeData(TreeItemActive->itemNew.hItem);
+    if (childsearch.mTreeItem == TreeItemActive->itemNew.hItem)
+    {
+      mParent->SelectText(childsearch.mLintItem.m_line_begin, childsearch.mLintItem.m_column_begin, childsearch.mLintItem.m_line_end, childsearch.mLintItem.m_column_end, true);
+      return;
+    }
+  }
+  {
+    const CTreeItem& childsearch = mBreakRoot.FindTreeData(TreeItemActive->itemNew.hItem);
+    if (childsearch.mTreeItem == TreeItemActive->itemNew.hItem)
+    {
+      mParent->SelectText(childsearch.mLintItem.m_line_begin, childsearch.mLintItem.m_column_begin, childsearch.mLintItem.m_line_end, childsearch.mLintItem.m_column_end, true);
+      return;
+    }
   }
 }

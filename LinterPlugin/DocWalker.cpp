@@ -148,6 +148,25 @@ bool CDocWalker::Match(const char* word, CDocPosition& endPosition)
 }
 
 
+bool CDocWalker::MatchIgnoreCase(const char* word, CDocPosition& endPosition)
+{
+  endPosition = static_cast<CDocPosition> (*this);
+
+  int64_t wordSize = strlen(word);
+  if (endPosition.mPos + wordSize > mDocLength)
+    return false;
+
+  for (int64_t i = 0; i < wordSize; i++)
+  {
+    if (toupper(GetChar(endPosition.mPos)) != toupper(word[i]))
+      return false;
+
+    endPosition.Increase(*this);
+  }
+  return true;
+}
+
+
 bool CDocWalker::FindWord(const char* word, int64_t LastPos, CDocPosition& startPosition, CDocPosition& endPosition)
 {
   startPosition = static_cast<CDocPosition> (*this);

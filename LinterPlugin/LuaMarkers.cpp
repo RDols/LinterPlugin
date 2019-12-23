@@ -21,6 +21,8 @@ void CLuaMarkers::DocodeString(char* srcDoc, int srcDocLength)
   {
     if (state == DecodeState::NORMAL)
       OnStateNormal();
+    else if (state == DecodeState::COMMENT)
+      OnStateComment();
     else if (state == DecodeState::COMMENT_BLOCK)
       OnStateCommentBlock();
     else if (state == DecodeState::STRING_BLOCK)
@@ -55,7 +57,7 @@ void CLuaMarkers::OnStateNormal()
     CDocPosition endPos;
     if (doc.Match("--[[Break]]", endPos))
     {
-      AddNewError(doc.mPos, doc.mLine, doc.mCol, endPos.mPos, endPos.mLine, endPos.mCol, 0, MRK_BREAK, "", "Break");
+      AddNewError(doc.mPos, doc.mLine, doc.mCol, endPos.mPos, endPos.mLine, endPos.mCol, 0, MRK_BREAK, "Break", "Break");
       doc.SetPosition(endPos);
       wordStart = doc;
     }
@@ -73,9 +75,12 @@ void CLuaMarkers::OnStateNormal()
     }
     else if (doc.Match("--", endPos))
     {
-      endPos = doc.FindEOL();
-      AddNewError(doc.mPos, doc.mLine, doc.mCol, endPos.mPos, endPos.mLine, endPos.mCol, 0, MRK_COMMENT_LINE, "", "Comment Line");
-      doc.SetPosition(endPos);
+      //endPos = doc.FindEOL();
+      stateStartPos = doc;
+      statePrevious = state;
+      state = DecodeState::COMMENT;
+      //AddNewError(doc.mPos, doc.mLine, doc.mCol, endPos.mPos, endPos.mLine, endPos.mCol, 0, MRK_COMMENT_LINE, "", "Comment Line");
+      //doc.SetPosition(endPos);
       wordStart = doc;
     }
   }
@@ -196,6 +201,30 @@ void CLuaMarkers::OnStateNormal()
   }
 }
 
+void CLuaMarkers::OnStateComment()
+{
+  CDocPosition endPos;
+  char c = doc.GetCurChar();
+  if (c == '\n')
+  {
+    AddNewError(stateStartPos.mPos, stateStartPos.mLine, stateStartPos.mCol, doc.mPos, doc.mLine, doc.mCol, 0, MRK_COMMENT_LINE, "", "Comment Block");
+    state = statePrevious;
+    //doc.SetPosition(endPos);
+    wordStart = doc;
+  }
+  else if (doc.MatchIgnoreCase("ToDo", endPos))
+  {
+    CDocPosition eolPos = doc.FindEOL();    
+    std::string subject = Trim(doc.GetString(doc.mPos + 4, eolPos.mPos - 1));
+    AddNewError(doc.mPos, doc.mLine, doc.mCol, eolPos.mPos, eolPos.mLine, eolPos.mCol, 0, MRK_TODO, subject, "ToDo");
+  }
+  else if (doc.MatchIgnoreCase("Note", endPos))
+  {
+    CDocPosition eolPos = doc.FindEOL();
+    std::string subject = Trim(doc.GetString(doc.mPos + 4, eolPos.mPos - 1));
+    AddNewError(doc.mPos, doc.mLine, doc.mCol, eolPos.mPos, eolPos.mLine, eolPos.mCol, 0, MRK_NOTE, subject, "Note");
+  }
+}
 
 void CLuaMarkers::OnStateCommentBlock()
 {
