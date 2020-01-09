@@ -25,7 +25,7 @@ public: //Interface
   void FixEasyPeasy();
   void FormatDocument();
 
-public: //INppDll overrides
+public: //NppDll overrides
   virtual void PluginInit(HMODULE Module);
   virtual void beNotified(SCNotification* Notification);
 

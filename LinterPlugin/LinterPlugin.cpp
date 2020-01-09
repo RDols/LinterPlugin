@@ -51,7 +51,7 @@ CLinterPlugin::~CLinterPlugin()
 void CLinterPlugin::PluginInit(HMODULE Module)
 {
   __super::PluginInit(Module);
-  mLintTester.Init(this, mModulePath);
+  mLintTester.Init(this, mModulePathW);
 }
 
 void CLinterPlugin::beNotified(SCNotification* Notification)
