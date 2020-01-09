@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.29609.76
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SetupLinterPlugin", "SetupLinterPlugin\SetupLinterPlugin.vdproj", "{9A32FFA6-4D2A-4546-81FC-AEB8D6A74FFD}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SetupAutoCompletion", "..\SetupAutoCompletion\SetupAutoCompletion\SetupAutoCompletion.vdproj", "{56E47FE3-905A-419D-8859-23C41A0866F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Default = Debug|Default
@@ -15,6 +17,8 @@ Global
 		{9A32FFA6-4D2A-4546-81FC-AEB8D6A74FFD}.Debug|Default.Build.0 = Debug
 		{9A32FFA6-4D2A-4546-81FC-AEB8D6A74FFD}.Release|Default.ActiveCfg = Release
 		{9A32FFA6-4D2A-4546-81FC-AEB8D6A74FFD}.Release|Default.Build.0 = Release
+		{56E47FE3-905A-419D-8859-23C41A0866F6}.Debug|Default.ActiveCfg = Debug
+		{56E47FE3-905A-419D-8859-23C41A0866F6}.Release|Default.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
