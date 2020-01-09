@@ -4,6 +4,7 @@ build/**/LinterPlugin.*
 build/**/AutoCompletionPlugin.*
 build/**/Temp
 build/**/TempSciLexer
+build/**/SciLexer*.*
 **/*.pdb
 build/**/Notepad++.exe
 **/*.aps
