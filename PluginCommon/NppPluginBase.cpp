@@ -92,6 +92,22 @@ std::string CNppPluginBase::GetLineText(int64_t line)
   return text;
 }
 
+std::string CNppPluginBase::GetTextRange(int64_t start, int64_t end)
+{
+  int64_t length = end - start;
+  char* buff = new char[length + 1];
+
+  Sci_TextRange range;
+  range.chrg.cpMin = (Sci_PositionCR) start;
+  range.chrg.cpMax = (Sci_PositionCR) end;
+  range.lpstrText = buff;
+  SendEditor(SCI_GETTEXTRANGE, 0, (LPARAM)&range);
+
+  std::string text(buff, length);
+  text = text.c_str();
+  delete[] buff;
+  return text;
+}
 //line and col are ONE based
 void CNppPluginBase::SelectText(int64_t startLine, int64_t startCol, int64_t endLine, int64_t endCol, bool MoveScrollbar)
 {
@@ -222,16 +238,27 @@ void CNppPluginBase::PluginInit(HMODULE Module)
 {
   mDllHandle = Module;
 
-  ::GetModuleFileName(mDllHandle, mModulePath, MAX_PATH);
+  //Ansi
+  ::GetModuleFileNameA(mDllHandle, mModulePathA, MAX_PATH);
+  char driveA[_MAX_DRIVE];
+  char dirA[_MAX_DIR];
+  char fnameA[_MAX_FNAME];
+  char extA[_MAX_EXT];
 
-  TCHAR drive[_MAX_DRIVE];
-  TCHAR dir[_MAX_DIR];
-  TCHAR fname[_MAX_FNAME];
-  TCHAR ext[_MAX_EXT];
+  _splitpath_s(mModulePathA, driveA, _MAX_DRIVE, dirA, _MAX_DIR, fnameA, _MAX_FNAME, extA, _MAX_EXT);
+  _makepath_s(mModuleFileA, MAX_PATH, NULL, NULL, fnameA, extA);
+  _makepath_s(mModulePathA, MAX_PATH, driveA, dirA, NULL, NULL);
 
-  _tsplitpath_s(mModulePath, drive, _MAX_DRIVE, dir, _MAX_DIR, fname, _MAX_FNAME, ext, _MAX_EXT);
-  _tmakepath_s(mModuleFile, MAX_PATH, NULL, NULL, fname, ext);
-  _tmakepath_s(mModulePath, MAX_PATH, drive, dir, NULL, NULL);
+  //Unicode
+  ::GetModuleFileNameW(mDllHandle, mModulePathW, MAX_PATH);
+  WCHAR driveW[_MAX_DRIVE];
+  WCHAR dirW[_MAX_DIR];
+  WCHAR fnameW[_MAX_FNAME];
+  WCHAR extW[_MAX_EXT];
+
+  _wsplitpath_s(mModulePathW, driveW, _MAX_DRIVE, dirW, _MAX_DIR, fnameW, _MAX_FNAME, extW, _MAX_EXT);
+  _wmakepath_s(mModuleFileW, MAX_PATH, NULL, NULL, fnameW, extW);
+  _wmakepath_s(mModulePathW, MAX_PATH, driveW, dirW, NULL, NULL);
 }
 
 void CNppPluginBase::ReadPluginConfigFile()

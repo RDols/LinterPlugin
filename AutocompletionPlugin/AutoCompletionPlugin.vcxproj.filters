@@ -44,6 +44,9 @@
     <ClInclude Include="..\PluginCommon\json.hpp">
       <Filter>Source Files\60 PluginCommon</Filter>
     </ClInclude>
+    <ClInclude Include="KeyWordList.h">
+      <Filter>Source Files\10 Main</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\PluginCommon\NppDll.cpp">
@@ -56,6 +59,9 @@
       <Filter>Source Files\10 Main</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files\10 Main</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyWordList.cpp">
       <Filter>Source Files\10 Main</Filter>
     </ClCompile>
   </ItemGroup>

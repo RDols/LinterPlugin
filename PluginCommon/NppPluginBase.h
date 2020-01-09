@@ -21,6 +21,7 @@ public:
 
 public:
   std::string GetLineText(int64_t line);
+  std::string GetTextRange(int64_t start, int64_t end);
   void SelectText(int64_t startLine, int64_t startCol, int64_t endLine, int64_t endCol, bool MoveScrollbar);
   LRESULT GetPositionForLine(int64_t line);
   int64_t GetPositionFromXY(int64_t line, int64_t pos);
@@ -68,8 +69,10 @@ protected: //Variables
   stringT mPluginName;
   std::string mPluginShortName;
   std::string mConfigFile;
-  TCHAR mModulePath[MAX_PATH];
-  TCHAR mModuleFile[MAX_PATH];
+  TCHAR mModulePathW[MAX_PATH];
+  TCHAR mModuleFileW[MAX_PATH];
+  char mModulePathA[MAX_PATH];
+  char mModuleFileA[MAX_PATH];
   std::vector<SFuncItem> mMenuItems; //Menu items
   std::vector<SToolbarItem> mToolbarItems;
 };

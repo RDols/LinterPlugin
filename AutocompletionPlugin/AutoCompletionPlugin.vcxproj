@@ -331,6 +331,7 @@
     <ClInclude Include="..\PluginCommon\NppDllData.h" />
     <ClInclude Include="..\PluginCommon\NppPluginBase.h" />
     <ClInclude Include="AutoCompletionPlugin.h" />
+    <ClInclude Include="KeyWordList.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -339,6 +340,7 @@
     <ClCompile Include="..\PluginCommon\NppDll.cpp" />
     <ClCompile Include="..\PluginCommon\NppPluginBase.cpp" />
     <ClCompile Include="AutoCompletionPlugin.cpp" />
+    <ClCompile Include="KeyWordList.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Unicode_Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Ansi_Release|x64'">Create</PrecompiledHeader>

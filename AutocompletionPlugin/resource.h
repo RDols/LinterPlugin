@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by AutoCompletion.rc
+// Used by AutoCompletionPlugin.rc
 //
 #define IDI_ICON_LUALINT                103
 #define IDB_BITMAP1                     104
