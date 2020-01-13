@@ -9,6 +9,7 @@ CAutoCompletionPlugin* Plugin = new CAutoCompletionPlugin;
 INppDll* nppDll = Plugin;
 
 #define PLUGIN_MENU_ENABLE              1
+#define PLUGIN_MENU_SHOW_AUTOCOMPLETION 2
 
 #define MSG_DELAYED_AUTOCOMPLETION      WM_USER + 7330
 
@@ -19,6 +20,7 @@ CAutoCompletionPlugin::CAutoCompletionPlugin()
   mPluginName = L"AutoCompletion";
   mPluginShortName = "AutoCompletion";
   AddMenuItem(PLUGIN_MENU_ENABLE, _T("Enable"), CAutoCompletionPlugin::EnablePluginStatic, NULL, true, 0);
+  AddMenuItem(PLUGIN_MENU_SHOW_AUTOCOMPLETION, _T("Show Autocompletion"), CAutoCompletionPlugin::ShowAutoCompletionStatic, NULL, false, 0);
 }
 
 CAutoCompletionPlugin ::~CAutoCompletionPlugin()

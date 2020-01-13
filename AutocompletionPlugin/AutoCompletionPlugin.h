@@ -25,6 +25,7 @@ public: //Interface
 
 public: //Menu Command
 	static void EnablePluginStatic() { Plugin->EnablePlugin(); };
+	static void ShowAutoCompletionStatic() { Plugin->OnAutoCompleteStart(true); };
 	void EnablePlugin();
 
 protected: //Help functions
