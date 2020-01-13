@@ -311,8 +311,14 @@ bool CLinterPlugin::ShowErrors(bool Force)
     showMarkers = !!mConfig["Editor"]["Error Exclamation"];
   }
 
+  for (auto& error : mErrors)
+  {
+    error.m_visible = false;
+  }
+
   for (auto viewError : viewList)
   {
+    mErrors[viewError].m_visible = true;
     if (showMarkers)
       SendEditor(SCI_MARKERADD, mErrors[viewError].m_line_begin - 1, mMarkerIdError);
     mErrors[viewError].m_position_begin = GetPositionFromXY(mErrors[viewError].m_line_begin, mErrors[viewError].m_column_begin);
@@ -411,11 +417,11 @@ void CLinterPlugin::OnDwellStart(int64_t Position, int /*x*/, int /*y*/)
   if (Position < 0) return;
 
   HWND hScintilla = GetScintillaHandle();
-  for (std::vector<SLintError>::iterator it = mErrors.begin(); it != mErrors.end(); it++)
+  for (auto& error : mErrors)
   {
-    if (Position >= it->m_line_begin && Position <= it->m_position_end)
+    if (error.m_visible && Position >= error.m_position_begin && Position <= error.m_position_end)
     {
-      ::SendMessage(hScintilla, SCI_CALLTIPSHOW, Position, (LPARAM) it->m_message.c_str());
+      ::SendMessage(hScintilla, SCI_CALLTIPSHOW, Position, (LPARAM)error.m_message.c_str());
       break;
     }
   }

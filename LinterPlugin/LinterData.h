@@ -41,6 +41,7 @@ struct SLintError
   int64_t m_error_code;
   std::string m_message;
   std::string m_subject;
+  bool m_visible;
 
   struct SLintError()
   {
@@ -54,6 +55,7 @@ struct SLintError
     m_position_end = -1;
     m_severity = NSeverity::DBG_DEBUG;
     m_error_code = 0;
+    m_visible = false;
   }
 
   bool operator==(SLintError other)
