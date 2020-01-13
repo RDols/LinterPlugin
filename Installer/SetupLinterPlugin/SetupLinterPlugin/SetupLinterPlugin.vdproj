@@ -39,6 +39,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_A5BE99651DC948408790157190123896"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_C8ECBE7F96D940BBA9803C5211DBC3A1"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -216,6 +222,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A5BE99651DC948408790157190123896"
+            {
+            "SourcePath" = "8:..\\..\\..\\build\\x64_Unicode_Release\\Plugins\\LinterPlugin\\EllipsLuaBindingsTable.lua"
+            "TargetName" = "8:EllipsLuaBindingsTable.lua"
+            "Tag" = "8:"
+            "Folder" = "8:_FD68448725104BDC82940C75C071539D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C8ECBE7F96D940BBA9803C5211DBC3A1"
             {
             "SourcePath" = "8:..\\..\\..\\build\\x64_Unicode_Release\\Plugins\\LinterPlugin\\lua53.dll"
@@ -312,15 +338,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:LinterPlugin"
-        "ProductCode" = "8:{570C8BA3-2A65-463F-B35A-A4C2327F64ED}"
-        "PackageCode" = "8:{86B561A8-7AC8-4499-8A67-5A76689C09E4}"
+        "ProductCode" = "8:{67E384D0-F27B-4804-992A-A7B089354089}"
+        "PackageCode" = "8:{6C18F3B9-A2BA-473B-B9E8-388F5001BA18}"
         "UpgradeCode" = "8:{ED837E97-E52A-4ADF-BF6D-D05B0353B857}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:FALSE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:19.12.24"
+        "ProductVersion" = "8:20.01.09"
         "Manufacturer" = "8:Default Company Name"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
