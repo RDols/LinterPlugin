@@ -6,15 +6,12 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Notepad++", "notepad-plus-plus\PowerEditor\visual.net\notepadPlus.vcxproj", "{FCF60E65-1B78-4D1D-AB59-4FC00AC8C248}"
 	ProjectSection(ProjectDependencies) = postProject
 		{15392927-615C-482E-94D2-BC012AAD37D6} = {15392927-615C-482E-94D2-BC012AAD37D6}
-		{FBE04237-9C7B-4973-9C60-505975998B39} = {FBE04237-9C7B-4973-9C60-505975998B39}
 		{C7B0BE98-C9FA-4752-A94C-C31130EAB48C} = {C7B0BE98-C9FA-4752-A94C-C31130EAB48C}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LinterPlugin", "LinterPlugin\LinterPlugin.vcxproj", "{15392927-615C-482E-94D2-BC012AAD37D6}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AutoCompletionPlugin", "AutocompletionPlugin\AutoCompletionPlugin.vcxproj", "{C7B0BE98-C9FA-4752-A94C-C31130EAB48C}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SciLexer", "notepad-plus-plus\scintilla\win32\SciLexer.vcxproj", "{FBE04237-9C7B-4973-9C60-505975998B39}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -76,22 +73,6 @@ Global
 		{C7B0BE98-C9FA-4752-A94C-C31130EAB48C}.Unicode_Release|x64.Build.0 = Unicode_Release|x64
 		{C7B0BE98-C9FA-4752-A94C-C31130EAB48C}.Unicode_Release|x86.ActiveCfg = Unicode_Release|Win32
 		{C7B0BE98-C9FA-4752-A94C-C31130EAB48C}.Unicode_Release|x86.Build.0 = Unicode_Release|Win32
-		{FBE04237-9C7B-4973-9C60-505975998B39}.Ansi_Debug|x64.ActiveCfg = Unicode_Release|x64
-		{FBE04237-9C7B-4973-9C60-505975998B39}.Ansi_Debug|x64.Build.0 = Unicode_Release|x64
-		{FBE04237-9C7B-4973-9C60-505975998B39}.Ansi_Debug|x86.ActiveCfg = Unicode_Release|Win32
-		{FBE04237-9C7B-4973-9C60-505975998B39}.Ansi_Debug|x86.Build.0 = Unicode_Release|Win32
-		{FBE04237-9C7B-4973-9C60-505975998B39}.Ansi_Release|x64.ActiveCfg = Unicode_Release|x64
-		{FBE04237-9C7B-4973-9C60-505975998B39}.Ansi_Release|x64.Build.0 = Unicode_Release|x64
-		{FBE04237-9C7B-4973-9C60-505975998B39}.Ansi_Release|x86.ActiveCfg = Unicode_Release|Win32
-		{FBE04237-9C7B-4973-9C60-505975998B39}.Ansi_Release|x86.Build.0 = Unicode_Release|Win32
-		{FBE04237-9C7B-4973-9C60-505975998B39}.Unicode_Debug|x64.ActiveCfg = Unicode_Debug|x64
-		{FBE04237-9C7B-4973-9C60-505975998B39}.Unicode_Debug|x64.Build.0 = Unicode_Debug|x64
-		{FBE04237-9C7B-4973-9C60-505975998B39}.Unicode_Debug|x86.ActiveCfg = Unicode_Debug|Win32
-		{FBE04237-9C7B-4973-9C60-505975998B39}.Unicode_Debug|x86.Build.0 = Unicode_Debug|Win32
-		{FBE04237-9C7B-4973-9C60-505975998B39}.Unicode_Release|x64.ActiveCfg = Unicode_Release|x64
-		{FBE04237-9C7B-4973-9C60-505975998B39}.Unicode_Release|x64.Build.0 = Unicode_Release|x64
-		{FBE04237-9C7B-4973-9C60-505975998B39}.Unicode_Release|x86.ActiveCfg = Unicode_Release|Win32
-		{FBE04237-9C7B-4973-9C60-505975998B39}.Unicode_Release|x86.Build.0 = Unicode_Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

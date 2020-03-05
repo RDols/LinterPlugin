@@ -229,8 +229,8 @@ IDI_TAB_FUNCTIONLIST    ICON                    "Resource\\TabFunctionList.ico"
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,20,1,9
- PRODUCTVERSION 1,20,1,9
+ FILEVERSION 1,20,3,5
+ PRODUCTVERSION 1,20,3,5
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -247,12 +247,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "---"
             VALUE "FileDescription", "Plugin for Linter tooling"
-            VALUE "FileVersion", "1.20.1.9"
+            VALUE "FileVersion", "1.20.3.5"
             VALUE "InternalName", "LinterPlugin.dll"
-            VALUE "LegalCopyright", "Copyright (C) 2019"
+            VALUE "LegalCopyright", "Copyright (C) 2020"
             VALUE "OriginalFilename", "LinterPlugin.dll"
             VALUE "ProductName", "LinterPlugin"
-            VALUE "ProductVersion", "1.20.1.9"
+            VALUE "ProductVersion", "1.20.3.5"
         END
     END
     BLOCK "VarFileInfo"
