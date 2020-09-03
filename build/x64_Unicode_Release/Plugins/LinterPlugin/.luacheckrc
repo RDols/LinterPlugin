@@ -2,7 +2,7 @@
 -- luacheck: globals max_line_length
 -- luacheck: globals stds
 
-stds.ellips = dofile("EllipsLuaBindingsTable.lua")
+stds.ellips = dofile("T:\\TFSBuildArtifacts\\EllipsLuaBindingsTable.lua")
 
 stds.i10 =
 {

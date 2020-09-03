@@ -57,13 +57,13 @@ void CLinterConfigDlg::ReadConfig()
   sub = mParent->mConfig["ResultWnd"];
   value = "";
   if (sub["Startup Position"].is_string())
-    value = sub["Startup Position"];
+    value = nlohmann::to_string(sub["Startup Position"]);
   mResultStartup.SetCheck(value);
 
   sub = mParent->mConfig["FunctionList"];
   value = "";
   if (sub["Startup Position"].is_string())
-    value = sub["Startup Position"];
+    value = nlohmann::to_string(sub["Startup Position"]);
   mFunctionStartup.SetCheck(value);
 
 
